@@ -6,8 +6,7 @@ const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        console.log("user", user);
+        console.log("login userCredential", userCredential);
         // ...
       })
       .catch((error) => {
