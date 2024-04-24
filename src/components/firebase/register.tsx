@@ -1,13 +1,24 @@
-import { auth } from "../firebase";
+import { auth } from "@/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
-const register = async (email: string, password: string) => {
+import registerDB from "./registerDB";
+const register = async (
+  email: string,
+  password: string,
+  nickname: string,
+  isSeller: boolean
+) => {
   try {
+    console.log("register", email, password, nickname, isSeller);
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed in
-        console.log("userCredential", userCredential);
-        // ...
+        registerDB({
+          email: email,
+          password: password,
+          nickname: nickname,
+          isSeller: isSeller,
+          id: userCredential.user.uid,
+        });
       })
       .catch((error) => {
         const errorCode = error.code;

@@ -1,13 +1,12 @@
-import { auth } from "../firebase";
+import { auth } from "@/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 const login = async (email: string, password: string) => {
+  console.log("login", email, password);
   try {
     await signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
         console.log("login userCredential", userCredential);
-        // ...
       })
       .catch((error) => {
         const errorCode = error.code;
