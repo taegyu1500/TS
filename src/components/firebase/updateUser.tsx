@@ -4,7 +4,7 @@ import User from "@/type/user";
 
 const updateUser = async (uid: string, data: User) => {
   try {
-    const docRef = doc(db, `user/${uid}`);
+    const docRef = doc(db, `USER/${uid}`);
     await updateDoc(docRef, {
       ...data,
       updatedAt: serverTimestamp(),

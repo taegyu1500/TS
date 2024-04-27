@@ -6,7 +6,7 @@ const uploadFiles = async (files: FileList | undefined, uid: string) => {
 
   if (files) {
     for (const file of files) {
-      const storageRef = ref(storage, `product/${uid}/${file.name}`);
+      const storageRef = ref(storage, `PRODUCT/${uid}/${file.name}`);
       await uploadBytes(storageRef, file);
       storageRefs.push(storageRef);
     }

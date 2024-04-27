@@ -11,7 +11,7 @@ import { useFormContext, Controller } from "react-hook-form";
 const options = ["의류", "가전제품", "가구", "생활용품", "식품", "기타"];
 
 interface SelectInputProps {
-  name: string; // form에서 이 input 요소를 식별하는 데 사용되는 이름입니다.
+  name: string;
 }
 
 export function SelectInput({ name, ...props }: SelectInputProps) {

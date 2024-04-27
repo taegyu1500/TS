@@ -25,7 +25,7 @@ const registerProduct = async (data: {
   };
 
   try {
-    const docRef = await addDoc(collection(db, "product"), { ...product });
+    const docRef = await addDoc(collection(db, "PRODUCT"), { ...product });
     console.log("Document written with ID: ", docRef.id);
     return docRef.id;
   } catch (e) {

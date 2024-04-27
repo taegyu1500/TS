@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 
 export async function callProduct(lastDoc: number | 0) {
-  const productCollection = collection(db, "product");
+  const productCollection = collection(db, "PRODUCT");
   const q = query(
     productCollection,
     orderBy("date", "desc"),

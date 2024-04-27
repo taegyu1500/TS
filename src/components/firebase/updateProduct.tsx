@@ -4,7 +4,7 @@ import Product from "@/type/Product";
 
 const updateDB = async (docId: string, data: Product) => {
   try {
-    const docRef = doc(db, `product/${docId}`);
+    const docRef = doc(db, `PRODUCT/${docId}`);
     await updateDoc(docRef, {
       ...data,
       updatedAt: serverTimestamp(),

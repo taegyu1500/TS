@@ -15,7 +15,7 @@ export async function callProduct(
   lastDoc: number | 0,
   sorting: sortingOptions
 ) {
-  const productCollection = collection(db, "product");
+  const productCollection = collection(db, "PRODUCT");
   const q = query(
     productCollection,
     orderBy(sorting, "desc"),

@@ -6,6 +6,7 @@ import { InputFile } from "../inputs/fileInput";
 import SelectInput from "../inputs/selectInput";
 import { Button } from "../ui/button";
 import { Separator } from "@radix-ui/react-select";
+import NumberInput from "../inputs/numberInput";
 
 export interface ProfileSetupInterface {
   steps: string[];
@@ -33,12 +34,12 @@ const RegisterSetup = ({
             id="description"
             placeholder="상품에 대한 설명을 입력해주세요"
           />
-          <TextInput
+          <NumberInput
             label="수량"
             id="quantity"
             placeholder="수량을 입력해주세요"
           />
-          <TextInput
+          <NumberInput
             label="가격"
             id="price"
             placeholder="가격을 입력해주세요"

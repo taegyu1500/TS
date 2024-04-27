@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Product from "@/type/Product";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import FirebaseImage from "@/components/common/firebaseImage";
