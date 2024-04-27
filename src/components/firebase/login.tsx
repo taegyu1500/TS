@@ -1,23 +1,18 @@
 import { auth } from "@/firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  setPersistence,
+  signInWithEmailAndPassword,
+  browserLocalPersistence,
+} from "firebase/auth";
 
 const login = async (email: string, password: string) => {
-  console.log("login", email, password);
-  try {
-    await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("login userCredential", userCredential);
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.log("errorCode", errorCode);
-        console.log("errorMessage", errorMessage);
-        // ..
-      });
-  } catch (error) {
-    console.error(error);
-  }
+  setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+      return signInWithEmailAndPassword(auth, email, password);
+    })
+    .catch((error) => {
+      console.log("errorCode", error.code);
+      console.log("errorMessage", error.message);
+    });
 };
-
 export default login;

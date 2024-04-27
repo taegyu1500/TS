@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/inputs/textInput";
-
+import { useNavigate } from "react-router-dom";
 import login from "@/components/firebase/login";
 import GenericForm from "@/components/common/GenericForm";
 
@@ -11,9 +11,11 @@ interface LoginPageProps {
 }
 
 export default function LoginPage() {
+  const Navigate = useNavigate();
   const onSubmit = (data: LoginPageProps) => {
     login(data.email, data.password).then(() => {
       console.log("로그인 성공!");
+      Navigate("/");
     });
   };
 
