@@ -3,6 +3,9 @@ import GenericForm from "@/components/common/GenericForm";
 import RegisterSetup from "@/components/formSetup/registerSetup";
 import registerProduct from "@/components/firebase/registerProduct";
 import { useNavigate } from "react-router-dom";
+import { Product } from "@/types/product";
+import { uploadFile } from "@/components/firebase/uploadFile";
+
 const steps = ["사용자 정보 선택", "로그인 정보"];
 
 interface FormData {
@@ -22,10 +25,19 @@ const RegisterPage = () => {
   };
 
   const handleSubmit = (data: FormData) => {
-    registerProduct() // isSeller 값을 register 함수에 전달합니다.
-      .then(() => {
-        console.log("회원 가입 성공!");
-        Navigate("/");
+    const product: Product = {
+      category: data.category,
+      description: data.description,
+      quantity: Number(data.quantity),
+      price: data.price,
+      file: data.file.map((file) => file.name),
+    };
+
+    registerProduct(product) // isSeller 값을 register 함수에 전달합니다.
+      .then((docRef) => {
+        uploadFile(data.file, docRef.id).then(() => {
+          Navigate("/");
+        });
       });
   };
 
