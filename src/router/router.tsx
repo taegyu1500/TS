@@ -5,6 +5,7 @@ import MainPage from "@/view/mainPage";
 import MainLayout from "@/layouts/mainLayout";
 import RegisterPage from "@/view/registerPage";
 import NonPrivateRoute from "./nonPrivateRoute";
+import ProductRegisterPage from "@/view/productRegisterPage";
 
 export default function Router() {
   return (
@@ -20,11 +21,11 @@ export default function Router() {
               </NonPrivateRoute>
             }
           />
-          <Route path="register" element={<RegisterPage />} />
-          {/* <Route path="shopping" element={<Shopping />*/}
-          {/* 이 아래 라우트는 중간에 확인과정을 거치도록 만들어질 예정 */}
-          {/* <Route path="personal" element={<PrivatePage />} */}
-          {/* <Route path= "" element={<PH />*/}
+          <Route path="product">
+            <Route path=":id" element={<MainPage />} />
+            <Route path="register" element={<ProductRegisterPage />} />
+          </Route>
+          <Route path="signup" element={<RegisterPage />} />
         </Route>
         <Route path="*" element={<MainPage />} />
       </Routes>

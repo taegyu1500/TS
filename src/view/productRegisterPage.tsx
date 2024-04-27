@@ -1,22 +1,20 @@
 import { useFunnel } from "@/hook/useFunnel";
 import GenericForm from "@/components/common/GenericForm";
-import RegisterSetup from "@/components/formSetup/registerSetup";
+import RegisterProductSetup from "@/components/formSetup/registerProductSetup";
 import registerProduct from "@/components/firebase/registerProduct";
 import { useNavigate } from "react-router-dom";
-import { Product } from "@/types/product";
-import { uploadFile } from "@/components/firebase/uploadFile";
+import { uploadFiles } from "@/components/firebase/uploadFile";
 
-const steps = ["사용자 정보 선택", "로그인 정보"];
-
+const steps = ["카테고리", "상품 설명", "이미지 등록"];
 interface FormData {
   category: string;
   description: string;
   quantity: string;
   price: number;
-  file: string[];
+  files: FileList;
 }
 
-const RegisterPage = () => {
+const ProductRegisterPage = () => {
   const Navigate = useNavigate();
   const { Funnel, Step, setStep } = useFunnel(steps[0]);
 
@@ -24,26 +22,30 @@ const RegisterPage = () => {
     setStep(nextStep);
   };
 
-  const handleSubmit = (data: FormData) => {
-    const product: Product = {
-      category: data.category,
-      description: data.description,
-      quantity: Number(data.quantity),
-      price: data.price,
-      file: data.file.map((file) => file.name),
+  const handleSubmit = async (data: FormData) => {
+    console.log(data);
+    const { category, description, quantity, price, files } = data;
+    console.log(files);
+    const product = {
+      category,
+      description,
+      quantity: Number(quantity),
+      price,
+      name: "상품 이름",
+      Images: files.length ? Array.from(files).map((file) => file.name) : [],
     };
 
-    registerProduct(product) // isSeller 값을 register 함수에 전달합니다.
-      .then((docRef) => {
-        uploadFile(data.file, docRef.id).then(() => {
-          Navigate("/");
-        });
-      });
+    const id = await registerProduct(product);
+
+    if (id) {
+      await uploadFiles(files, id);
+      Navigate("/main");
+    }
   };
 
   return (
     <GenericForm onSubmit={handleSubmit}>
-      <RegisterSetup
+      <RegisterProductSetup
         steps={steps}
         nextClickHandler={nextClickHandler}
         Funnel={Funnel}
@@ -53,4 +55,4 @@ const RegisterPage = () => {
   );
 };
 
-export default RegisterPage;
+export default ProductRegisterPage;

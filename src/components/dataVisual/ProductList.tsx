@@ -10,6 +10,7 @@ import {
 interface ProductListProps {
   products: Product[];
 }
+console.log("ProductList.tsx");
 
 export default function ProductList({ products }: ProductListProps) {
   return (

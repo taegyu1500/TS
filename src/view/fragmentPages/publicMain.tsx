@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import ShowProduct from "./ShowProduct";
 
 export default function PublicMain() {
   const Navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function PublicMain() {
         >
           Go to login page
         </button>
+        <ShowProduct />
       </div>
     </Fragment>
   );
