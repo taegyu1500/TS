@@ -1,3 +1,4 @@
+import { Controller, useFormContext } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -6,7 +7,6 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import { useFormContext, Controller } from "react-hook-form";
 
 const options = ["의류", "가전제품", "가구", "생활용품", "식품", "기타"];
 
@@ -22,7 +22,7 @@ export function SelectInput({ name, ...props }: SelectInputProps) {
       name={name}
       control={control}
       render={({ field }) => (
-        <Select {...props} {...field}>
+        <Select {...props} value={field.value}>
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="카테고리 선택해주세요!" />
           </SelectTrigger>
@@ -33,8 +33,9 @@ export function SelectInput({ name, ...props }: SelectInputProps) {
                   <SelectItem
                     key={option}
                     value={option}
-                    onClick={() => {
+                    onMouseDown={() => {
                       field.onChange(option);
+                      console.log(field.value);
                     }}
                   >
                     {option}

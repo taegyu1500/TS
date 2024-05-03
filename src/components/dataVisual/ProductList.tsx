@@ -3,29 +3,42 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableHeader,
   TableHead,
   TableRow,
 } from "@/components/ui/table";
-
+import { useNavigate } from "react-router-dom";
 interface ProductListProps {
   products: Product[];
 }
-console.log("ProductList.tsx");
 
 export default function ProductList({ products }: ProductListProps) {
+  const Navigate = useNavigate();
+  const handleClick = (id: string) => {
+    console.log(id);
+    Navigate(`${id}`);
+  };
   return (
     <Table>
-      <TableHead>
+      <TableHeader>
         <TableRow>
-          <TableCell>이미지</TableCell>
-          <TableCell>수량</TableCell>
-          <TableCell>가격</TableCell>
+          <TableHead>이미지</TableHead>
+          <TableHead>수량</TableHead>
+          <TableHead>가격</TableHead>
         </TableRow>
-      </TableHead>
+      </TableHeader>
       <TableBody>
         {products.map((product) => (
-          <TableRow key={product.id}>
-            <TableCell>{product.productImage}</TableCell>
+          <TableRow
+            key={product.id?.toString() ?? ""}
+            onClick={() => handleClick(product.id?.toString() ?? "")}
+          >
+            {/* <TableCell>{product.productImage}</TableCell> */}
+            <TableCell
+              onClick={() => handleClick(product.id?.toString() ?? "")}
+            >
+              {product.productName}
+            </TableCell>
             <TableCell>{product.productQuantity}</TableCell>
             <TableCell>{product.productPrice}</TableCell>
           </TableRow>

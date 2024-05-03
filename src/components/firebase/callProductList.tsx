@@ -9,7 +9,7 @@ import {
   startAfter,
 } from "firebase/firestore";
 
-export async function callProduct(lastDoc: number | 0) {
+export async function callProductList(lastDoc: number | 0) {
   const productCollection = collection(db, "PRODUCT");
   const q = query(
     productCollection,

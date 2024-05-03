@@ -6,6 +6,8 @@ import MainLayout from "@/layouts/mainLayout";
 import RegisterPage from "@/view/registerPage";
 import NonPrivateRoute from "./nonPrivateRoute";
 import ProductRegisterPage from "@/view/productRegisterPage";
+import ProductDetailPage from "@/view/productDetailPage";
+import ProductListPage from "@/view/productListPage";
 
 export default function Router() {
   return (
@@ -22,8 +24,9 @@ export default function Router() {
             }
           />
           <Route path="product">
-            <Route path=":id" element={<MainPage />} />
+            <Route path=":id" element={<ProductDetailPage />} />
             <Route path="register" element={<ProductRegisterPage />} />
+            <Route index element={<ProductListPage />} />
           </Route>
           <Route path="signup" element={<RegisterPage />} />
         </Route>

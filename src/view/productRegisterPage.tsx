@@ -26,6 +26,10 @@ const ProductRegisterPage = () => {
     console.log(data);
     const { category, description, quantity, price, files } = data;
     console.log(files);
+    if (category === undefined) {
+      alert("카테고리를 선택해주세요.");
+      return;
+    }
     const product = {
       category,
       description,
