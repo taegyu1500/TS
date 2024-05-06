@@ -1,15 +1,26 @@
-// 전체 레이아웃이 될 MainLayout 컴포넌트를 생성합니다.
+import { Toaster } from "@/components/ui/toaster";
 import BodyLayout from "./bodyLayout";
 import HeaderLayout from "./headerLayout";
 import NavigationLayout from "./navigationLayout";
 import { Outlet } from "react-router-dom";
-
+import { PendingProvider } from "@/context/PendingContext";
+import { ModalProvider } from "@/context/ModalContext";
 export default function MainLayout() {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
-      <HeaderLayout />
-      <NavigationLayout />
-      <BodyLayout children={<Outlet />} />
+    <div>
+      <Toaster />
+
+      <div className="flex min-h-screen w-full flex-col bg-muted/40">
+        <NavigationLayout />
+        <BodyLayout>
+          <PendingProvider>
+            <ModalProvider>
+              <HeaderLayout />
+              <Outlet />
+            </ModalProvider>
+          </PendingProvider>
+        </BodyLayout>
+      </div>
     </div>
   );
 }

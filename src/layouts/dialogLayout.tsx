@@ -1,30 +1,45 @@
+import React, { useContext } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-
 import { Button } from "@/components/ui/button";
+import { ModalContext } from "@/context/ModalContext";
 
-export default function DialogLayout() {
+export default function DialogLayout({
+  children,
+  Header,
+  type,
+}: {
+  children: React.ReactNode;
+  Header: string;
+  type: "confirm" | "alert";
+}) {
+  const dialog = useContext(ModalContext);
+
+  if (!dialog) {
+    throw new Error("DialogLayout must be used within a ModalContext");
+  }
+
+  const { isOpen, closeModal } = dialog;
+
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button>Open Dialog</Button>
-      </DialogTrigger>
+    <Dialog open={isOpen}>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Dialog Title</DialogTitle>
-          <DialogDescription>Dialog Description</DialogDescription>
-        </DialogHeader>
-        <DialogFooter>
-          <Button>Cancel</Button>
-          <Button>Confirm</Button>
-        </DialogFooter>
+        <DialogHeader>{Header}</DialogHeader>
+        {children}
+        {type === "confirm" ? (
+          <DialogFooter>
+            <Button onClick={() => closeModal()}>Cancel</Button>
+            <Button>Confirm</Button>
+          </DialogFooter>
+        ) : (
+          <DialogFooter>
+            <Button onClick={() => closeModal()}>OK</Button>
+          </DialogFooter>
+        )}
       </DialogContent>
     </Dialog>
   );
