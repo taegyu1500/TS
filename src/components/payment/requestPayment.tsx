@@ -15,6 +15,12 @@ function requestPayment({
     currency: "CURRENCY_KRW",
     channelKey: import.meta.env.VITE_PORTONE_CHANNEL_KEY, // 콘솔 결제 연동 화면에서 채널 연동 시 생성된 채널 키를 입력해주세요.
     payMethod: "CARD",
+  }).then((response) => {
+    if (response && response.code === "success") {
+      return response;
+    } else {
+      return Error("결재 실패");
+    }
   });
 }
 
