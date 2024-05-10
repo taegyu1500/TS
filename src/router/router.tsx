@@ -8,6 +8,8 @@ import NonPrivateRoute from "./nonPrivateRoute";
 import ProductRegisterPage from "@/view/productRegisterPage";
 import ProductDetailPage from "@/view/productDetailPage";
 import ProductListPage from "@/view/productListPage";
+import PrivateRoute from "./privateRoute";
+import OrderPage from "@/view/orderPage";
 
 export default function Router() {
   return (
@@ -29,6 +31,14 @@ export default function Router() {
             <Route index element={<ProductListPage />} />
           </Route>
           <Route path="signup" element={<RegisterPage />} />
+          <Route
+            path="payment"
+            element={
+              <PrivateRoute>
+                <OrderPage />
+              </PrivateRoute>
+            }
+          />
         </Route>
         <Route path="*" element={<MainPage />} />
       </Routes>

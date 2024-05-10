@@ -1,4 +1,5 @@
-import { createContext, useState, useCallback, useEffect } from "react";
+import { createContext, useCallback, useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { callShoppingList } from "@/components/firebase/callShopingList";
 import Product from "@/type/Product";
 import { auth } from "@/firebase";
@@ -17,49 +18,51 @@ export const PendingProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [productList, setProductList] = useState<Product[]>([]);
+  const fetchProducts = async () => {
+    return await callShoppingList(auth.currentUser?.uid ?? "");
+  };
+
+  const { data: productList = [], refetch } = useQuery(
+    "products",
+    fetchProducts
+  );
+
+  const [localProductList, setLocalProductList] = useState<Product[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const products = await callShoppingList(auth.currentUser?.uid ?? "");
-      setProductList(products);
-    };
-
-    fetchProducts();
-  }, []);
+    setLocalProductList(productList);
+  }, [productList.length]); // Include 'productList' in the dependency array.
 
   const addProduct = useCallback((product: Product) => {
-    setProductList((prevList) => [...prevList, product]);
+    setLocalProductList((prev) => [...prev, product]);
   }, []);
 
   const removeProduct = useCallback((id: string) => {
-    setProductList((prevList) =>
-      prevList.filter((product) => product.id !== id)
-    );
+    setLocalProductList((prev) => prev.filter((product) => product.id !== id));
   }, []);
 
   const clearProduct = useCallback(() => {
-    setProductList([]);
-  }, []);
+    refetch();
+  }, [refetch]);
 
   const getProduct = useCallback(
     (id: string) => {
-      return productList.find((product) => product.id === id);
+      return localProductList.find((product) => product.id === id);
     },
-    [productList]
+    [localProductList]
   );
 
   const calcPrice = useCallback(() => {
-    return productList.reduce(
+    return localProductList.reduce(
       (acc, product) => acc + Number(product.productPrice),
       0
     );
-  }, [productList]);
+  }, [localProductList]);
 
   return (
     <PendingContext.Provider
       value={{
-        productList,
+        productList: localProductList,
         addProduct,
         removeProduct,
         clearProduct,

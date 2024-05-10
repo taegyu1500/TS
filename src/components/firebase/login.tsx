@@ -8,6 +8,7 @@ import {
 const login = async (email: string, password: string) => {
   setPersistence(auth, browserLocalPersistence)
     .then(() => {
+      console.log("login", browserLocalPersistence);
       return signInWithEmailAndPassword(auth, email, password);
     })
     .catch((error) => {

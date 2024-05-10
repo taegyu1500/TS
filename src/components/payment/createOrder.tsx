@@ -2,10 +2,22 @@ import Order from "@/type/Order";
 import { db } from "@/firebase";
 import { collection, addDoc } from "firebase/firestore";
 
-export default async function createOrder(order: Order) {
+export default async function createOrder({
+  sellerId,
+  buyerId,
+  productQuantity,
+  Status,
+  id,
+  ...rest
+}: Order) {
   try {
     const docRef = await addDoc(collection(db, "ORDER"), {
-      ...order,
+      sellerId,
+      buyerId,
+      id,
+      productQuantity,
+      Status,
+      ...rest,
       createdAt: new Date(),
       updatedAt: new Date(),
     });
