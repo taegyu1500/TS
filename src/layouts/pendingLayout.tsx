@@ -11,7 +11,6 @@ export default function PendingLayout({
   product: ExtendedProduct;
   order: number;
 }) {
-  console.log(product);
   return (
     <div className="flex horizontal space-between">
       <div className="m-2">{order}</div>
