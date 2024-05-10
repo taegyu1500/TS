@@ -40,11 +40,25 @@ export default function HeaderLayout() {
               </button>
             </div>
           )}
-
           {auth.currentUser && (
-            <button className="btn" onClick={openModal}>
-              장바구니
-            </button>
+            <div>
+              <button className="btn" onClick={openModal}>
+                장바구니
+              </button>
+              <button className="btn" onClick={() => Navigate("/payment")}>
+                결제하기
+              </button>
+              <button
+                className="btn"
+                onClick={() => {
+                  auth.signOut();
+                  alert("로그아웃 되었습니다.");
+                  Navigate("/");
+                }}
+              >
+                로그아웃
+              </button>
+            </div>
           )}
         </div>
         <div className="relative ml-auto flex-1 md:grow-0">
