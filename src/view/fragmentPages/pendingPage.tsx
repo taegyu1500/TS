@@ -1,22 +1,30 @@
-import { PendingContext } from "@/context/PendingContext";
-import React, { useContext } from "react";
+import React from "react";
 import { Separator } from "@/components/ui/separator";
 import PendingTableLayout from "@/layouts/pendingTableLayout";
+import { useQuery } from "react-query";
+import { callShoppingList } from "@/util/firebaseFunctions";
+import { auth } from "@/firebase";
+
+const MemorizedPendingTableLayout = React.memo(PendingTableLayout);
 
 export default function PendingPage() {
-  const context = useContext(PendingContext);
-  if (!context)
-    throw new Error("usePending must be used within a PendingProvider");
+  const { data: shoppingList = [] } = useQuery("shoppingList", () =>
+    callShoppingList(auth.currentUser?.uid || "")
+  );
+  const totalPrice = shoppingList.reduce(
+    (total, item) => total + item.productPrice * item.quantity,
+    0
+  );
 
   return (
     <React.Fragment>
-      {context.productList.length > 0 ? (
-        <PendingTableLayout />
+      {shoppingList.length > 0 ? (
+        <MemorizedPendingTableLayout />
       ) : (
         <div>상품이 없습니다</div>
       )}
       <Separator />
-      {context.calcPrice() > 0 && <div>총 가격:{context.calcPrice()}원</div>}
+      {totalPrice && <div>총 가격:{totalPrice}원</div>}
     </React.Fragment>
   );
 }

@@ -12,6 +12,7 @@ import {
   doc,
   getDoc,
   updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import Product from "@/type/Product";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
@@ -23,10 +24,20 @@ import {
   signOut,
   User,
 } from "firebase/auth";
+import Shopping from "@/type/Shopping";
 
 export async function addShoppingList(product: Product, user: string) {
   try {
     const data = await callShoppingList(user);
+    const existingProduct = data.find(
+      (item: Product) => item.id === product.id
+    );
+
+    if (existingProduct) {
+      console.log("Product already exists in the shopping list.");
+      return;
+    }
+
     const quantity = data && data.length ? data.length + 1 : 1;
     await addDoc(collection(db, "SHOPPING_LIST"), {
       ...product,
@@ -43,11 +54,12 @@ export async function addShoppingList(product: Product, user: string) {
 export async function callShoppingList(user: string) {
   const productCollection = collection(db, "SHOPPING_LIST");
   const q = query(productCollection, where("owner", "==", user));
-  const products: Product[] = [];
+  const products: Shopping[] = [];
   try {
     const productSnapshot = await getDocs(q);
     productSnapshot.forEach((doc) => {
-      products.push(doc.data() as Product);
+      const shopping = doc.data() as Shopping;
+      products.push(shopping);
     });
   } catch (error) {
     console.error("Error getting documents: ", error);
@@ -110,10 +122,10 @@ export const getProduct = async () => {
   try {
     const querySnapshot = await getDocs(query(collection(db, "PRODUCT")));
     console.log(querySnapshot);
-    if (querySnapshot.empty) return {};
-    let data = {};
+    if (querySnapshot.empty) return [];
+    const data: Product[] = [];
     querySnapshot.forEach((doc) => {
-      data = { id: doc.id, ...doc.data() };
+      data.push({ id: doc.id, ...doc.data() } as Product);
     });
     return data;
   } catch (error) {
@@ -148,8 +160,8 @@ export async function getUser(uid: string) {
   return docSnap.data();
 }
 
-export const login = async (email: string, password: string) => {
-  setPersistence(auth, browserLocalPersistence)
+export const login = (email: string, password: string) => {
+  return setPersistence(auth, browserLocalPersistence)
     .then(() => {
       console.log("login", browserLocalPersistence);
       return signInWithEmailAndPassword(auth, email, password);
@@ -157,6 +169,7 @@ export const login = async (email: string, password: string) => {
     .catch((error) => {
       console.log("errorCode", error.code);
       console.log("errorMessage", error.message);
+      throw error; // 에러를 다시 던져서 호출하는 쪽에서 catch 할 수 있게 합니다.
     });
 };
 
@@ -316,4 +329,47 @@ export const uploadFiles = async (files: FileList | undefined, uid: string) => {
       storageRefs.push(storageRef);
     }
   }
+};
+
+export const updateShoppingQuantity = async (id: string, delta: number) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(collection(db, "SHOPPING_LIST"), where("id", "==", id))
+    );
+    const docRef = querySnapshot.docs[0].ref;
+    await updateDoc(docRef, {
+      quantity: querySnapshot.docs[0].data().quantity + delta,
+    });
+    console.log("Document updated with ID: ", docRef.id);
+  } catch (e) {
+    console.error("Error updating document: ", e);
+  }
+};
+
+export const deleteShoppingList = async (id: string) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(collection(db, "SHOPPING_LIST"), where("id", "==", id))
+    );
+    const docRef = querySnapshot.docs[0].ref;
+    await deleteDoc(docRef);
+  } catch (e) {
+    console.error("Error deleting document: ", e);
+  }
+};
+
+export const checkUserSeller = async () => {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  const q = query(collection(db, "USER"), where("email", "==", user.email));
+  const querySnapshot = await getDocs(q);
+  let isSeller = false;
+  querySnapshot.forEach((doc) => {
+    isSeller = doc.data().isSeller;
+  });
+
+  return isSeller;
 };

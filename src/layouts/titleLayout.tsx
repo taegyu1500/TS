@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 export default function Titlelayout() {
   const navigate = useNavigate();
   const click = () => {
-    navigate("/main");
+    navigate("/");
   };
   return (
     <div onClick={click}>

@@ -7,6 +7,7 @@ import getProductById from "@/components/firebase/getProductById";
 import addShoppingList from "@/components/firebase/addShoppingList";
 import { auth } from "@/firebase";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,7 +35,11 @@ const ProductDetailPage = () => {
         const imageElements = await Promise.all(
           fetchedProduct.productImage.map(
             (image: string) =>
-              FirebaseImage(fetchedProduct.id?.toString() ?? "", image) // Added null check before calling toString()
+              FirebaseImage(
+                fetchedProduct.id?.toString() ?? "",
+                image,
+                "normal"
+              ) // Added null check before calling toString()
           )
         );
         console.log(imageElements);
@@ -50,14 +55,41 @@ const ProductDetailPage = () => {
   }
 
   return (
-    <Card>
-      <CardHeader>{images}</CardHeader>
-      <CardContent>
-        <p>{product.productQuantity}</p>
-        <p>{product.productDescription}</p>
-        <button onClick={handleAddShoppingList}>구매하기</button>
-      </CardContent>
-    </Card>
+    <div className="flex justify-between">
+      <div className="w-4/5">
+        <Card>
+          <CardHeader>{images}</CardHeader>
+          <CardContent>
+            <h2>{product.productName}</h2>
+            <Card>
+              <CardHeader>상세 정보</CardHeader>
+              <CardContent>
+                <p>{product.productDescription}</p>
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader>카테고리</CardHeader>
+              <CardContent>
+                <p>{product.productCategory}</p>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="w-1/5">
+        <Card>
+          <CardHeader>가격</CardHeader>
+          <CardContent>
+            <p>{product.productPrice}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Button onClick={handleAddShoppingList}>장바구니에 담기</Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 };
 

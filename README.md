@@ -1,30 +1,38 @@
-# React + TypeScript + Vite
+# E-Commerce App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+상품 등록 및 결제 연동 커머스 웹사이트 구현
 
-Currently, two official plugins are available:
+## 구현 및 배포기술
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- React를 typescript를 통해 사용
+- react-query를 통해 캐싱 및 실시간 데이터 관리
+- 비즈니스, 뷰 로직 분리
+-
 
-## Expanding the ESLint configuration
+## 목표
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [x] 레이아웃 구성
+- [x] 상품 리스트 무한스크롤
+- [x] 로그인 유지
+- [O] 상품 상세 페이지
+- [O] 장바구니 기능 구현
+- [O] 결제 연동
+- [O] 상품 등록 페이지
+- [O] 상품 리스트 페이지
+- [O] 조건부 라우팅
 
-- Configure the top-level `parserOptions` property like this:
+## 현재 진행중인 이슈
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- 로그인 유지가 되지 않으나, 로그인은 되어 있는 상태
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+* 2024/05/17 mainLayout에 체크하고 loading... 상태를 만들어 해결
+
+- 레이아웃
+
+* 2024/05/17 레이아웃 문제의 원인이었던 bodyLayout 파일 삭제 이후 조정을 통해 해결
+
+- 중복체크 로직을 zod를 사용하여 구현(진행중)
+
+## 프로젝트 개발환경
+
+React(17.0.2), Typescript(4.4.3), react-query(3.21.0), react-router-dom(5.3.0)

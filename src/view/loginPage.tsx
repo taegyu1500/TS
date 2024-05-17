@@ -2,8 +2,9 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/inputs/textInput";
 import { useNavigate } from "react-router-dom";
-import login from "@/components/firebase/login";
+import { login } from "@/util/firebaseFunctions";
 import GenericForm from "@/components/common/GenericForm";
+import { useToast } from "@/components/ui/use-toast";
 
 interface LoginPageProps {
   email: string;
@@ -12,15 +13,24 @@ interface LoginPageProps {
 
 export default function LoginPage() {
   const Navigate = useNavigate();
+  const { toast } = useToast();
   const onSubmit = (data: LoginPageProps) => {
-    login(data.email, data.password).then(() => {
-      console.log("로그인 성공!");
-      Navigate("/");
-    });
+    login(data.email, data.password)
+      .then(() => {
+        console.log("로그인 성공!");
+        Navigate("/");
+      })
+      .catch((error) => {
+        toast({
+          title: "로그인 실패",
+          description: "이메일 또는 비밀번호가 일치하지 않습니다.",
+        });
+        console.error(error);
+      });
   };
 
   return (
-    <div className="grid gap-4">
+    <div className="flex justify-center items-center overflow-hidden">
       <GenericForm onSubmit={onSubmit}>
         <div className="grid gap-2">
           <TextInput
@@ -39,7 +49,7 @@ export default function LoginPage() {
         <Button type="submit" className="w-full">
           로그인
         </Button>
-        <Button variant="outline" className="w-full">
+        <Button variant="outline" className="w-full" type="button">
           구글로 로그인하기
         </Button>
         <div className="mt-4 text-center text-sm">
