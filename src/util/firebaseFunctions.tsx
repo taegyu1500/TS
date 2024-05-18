@@ -19,8 +19,10 @@ import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import {
   browserLocalPersistence,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   setPersistence,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   User,
 } from "firebase/auth";
@@ -169,7 +171,7 @@ export const login = (email: string, password: string) => {
     .catch((error) => {
       console.log("errorCode", error.code);
       console.log("errorMessage", error.message);
-      throw error; // 에러를 다시 던져서 호출하는 쪽에서 catch 할 수 있게 합니다.
+      throw error;
     });
 };
 
@@ -372,4 +374,21 @@ export const checkUserSeller = async () => {
   });
 
   return isSeller;
+};
+
+export const googleLogin = async () => {
+  return signInWithPopup(auth, new GoogleAuthProvider())
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential?.accessToken;
+      const user = result.user;
+      console.log(user, token);
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      const email = error.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+      console.log(errorCode, errorMessage, email, credential);
+    });
 };
