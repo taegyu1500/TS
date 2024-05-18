@@ -1,0 +1,1 @@
+import{u as n,j as t,r as s}from"./index-BzRYe7T0.js";import{B as a}from"./button-cc73kDZo.js";function i(){const r=n();return t.jsxs(s.Fragment,{children:[t.jsx("div",{children:"안녕하세요 상품 구매, 등록은 로그인 후 이용 가능합니다."}),t.jsx(a,{className:"btn",onClick:()=>r("/product"),children:"상품 보러가기"})]})}function c(){return t.jsx("div",{children:t.jsx(i,{})})}export{c as default};

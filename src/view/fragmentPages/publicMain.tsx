@@ -1,24 +1,16 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
-import ShowProduct from "./ShowProduct";
+import { Button } from "@/components/ui/button";
 
 export default function PublicMain() {
   const Navigate = useNavigate();
 
   return (
     <Fragment>
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Welcome to the public main page!</h1>
-        <button
-          onClick={() => {
-            Navigate("/login");
-          }}
-          className="mt-4 px-4 py-2 bg-primary text-white rounded-md"
-        >
-          Go to login page
-        </button>
-        <ShowProduct />
-      </div>
+      <div>안녕하세요 상품 구매, 등록은 로그인 후 이용 가능합니다.</div>
+      <Button className="btn" onClick={() => Navigate("/product")}>
+        상품 보러가기
+      </Button>
     </Fragment>
   );
 }

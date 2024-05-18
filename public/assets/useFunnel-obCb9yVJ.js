@@ -1,0 +1,1 @@
+import{r as u,j as t}from"./index-BzRYe7T0.js";const l=r=>{const[n,s]=u.useState(r);return{Funnel:({children:e})=>{const p=e.find(o=>o.props.name===n);return t.jsx(t.Fragment,{children:p})},Step:e=>t.jsx(t.Fragment,{children:e.children}),setStep:s,currentStep:n}};export{l as u};

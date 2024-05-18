@@ -1,0 +1,1 @@
+import{b as r,j as s,N as e}from"./index-BzRYe7T0.js";import{a as n}from"./firebase-DMO3EB_U.js";function c({children:t}){const o=n.currentUser,a=r();return o?t:s.jsx(e,{to:"/login",state:{from:a}})}export{c as default};

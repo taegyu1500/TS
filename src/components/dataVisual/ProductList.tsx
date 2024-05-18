@@ -22,7 +22,8 @@ export default function ProductList({ products }: ProductListProps) {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>이미지</TableHead>
+          <TableHead>카테고리</TableHead>
+          <TableHead>이름</TableHead>
           <TableHead>수량</TableHead>
           <TableHead>가격</TableHead>
         </TableRow>
@@ -34,6 +35,7 @@ export default function ProductList({ products }: ProductListProps) {
             onClick={() => handleClick(product.id?.toString() ?? "")}
           >
             {/* <TableCell>{product.productImage}</TableCell> */}
+            <TableCell>{product.productCategory}</TableCell>
             <TableCell
               onClick={() => handleClick(product.id?.toString() ?? "")}
             >

@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { ModalContext } from "@/context/ModalContext";
 import { auth } from "@/firebase";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 export default function HeaderLayout() {
   const context = useContext(ModalContext);
@@ -16,39 +17,44 @@ export default function HeaderLayout() {
   };
 
   return (
-    <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+    <div className="container mx-auto px-4 md:px-8 lg:px-16 py-5">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
         <Titlelayout />
         <div className="flex gap-4">
+          <div>
+            <Button className="btn" onClick={() => Navigate("/product")}>
+              상품
+            </Button>
+          </div>
           {!auth.currentUser && (
-            <div>
-              <button
+            <div className="flex gap-4">
+              <Button
                 className="btn"
                 onClick={() => {
                   Navigate("/login");
                 }}
               >
                 로그인
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn"
                 onClick={() => {
-                  Navigate("/register");
+                  Navigate("/signup");
                 }}
               >
                 회원가입
-              </button>
+              </Button>
             </div>
           )}
           {auth.currentUser && (
-            <div>
-              <button className="btn" onClick={openModal}>
+            <div className="flex gap-4">
+              <Button className="btn" onClick={openModal}>
                 장바구니
-              </button>
-              <button className="btn" onClick={() => Navigate("/payment")}>
+              </Button>
+              <Button className="btn" onClick={() => Navigate("/payment")}>
                 결제하기
-              </button>
-              <button
+              </Button>
+              <Button
                 className="btn"
                 onClick={() => {
                   auth.signOut();
@@ -57,7 +63,7 @@ export default function HeaderLayout() {
                 }}
               >
                 로그아웃
-              </button>
+              </Button>
             </div>
           )}
         </div>
@@ -66,6 +72,11 @@ export default function HeaderLayout() {
             type="search"
             placeholder="Search..."
             className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                Navigate(`/search/${e.currentTarget.value}`);
+              }
+            }}
           />
         </div>
       </header>
