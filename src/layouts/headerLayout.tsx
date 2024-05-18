@@ -39,7 +39,7 @@ export default function HeaderLayout() {
               <Button
                 className="btn"
                 onClick={() => {
-                  Navigate("/register");
+                  Navigate("/signup");
                 }}
               >
                 회원가입
@@ -72,6 +72,11 @@ export default function HeaderLayout() {
             type="search"
             placeholder="Search..."
             className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[336px]"
+            onKeyUp={(e) => {
+              if (e.key === "Enter") {
+                Navigate(`/search/${e.currentTarget.value}`);
+              }
+            }}
           />
         </div>
       </header>

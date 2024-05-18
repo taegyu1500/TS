@@ -14,7 +14,11 @@ const ProductLayout = ({ product }: ProductLayoutProps) => {
     const fetchImages = async () => {
       const imageElements = await Promise.all(
         product.productImage.map((image) =>
-          FirebaseImage((product.id ?? "").toString(), image.toString())
+          FirebaseImage(
+            (product.id ?? "").toString(),
+            image.toString(),
+            "normal"
+          )
         )
       );
       setImages(imageElements);

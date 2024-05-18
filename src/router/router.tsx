@@ -12,6 +12,7 @@ const ProductListPage = lazy(() => import("@/view/productListPage"));
 const PrivateRoute = lazy(() => import("./privateRoute"));
 const OrderPage = lazy(() => import("@/view/orderPage"));
 const ErrorPage = lazy(() => import("@/view/fragmentPages/errorPage"));
+const SearchList = lazy(() => import("@/view/searchList"));
 
 export default function Router() {
   return (
@@ -42,6 +43,7 @@ export default function Router() {
                 </PrivateRoute>
               }
             />
+            <Route path="search/:keyword" element={<SearchList />} />
             <Route path="*" element={<ErrorPage />} />
           </Route>
           {/* <Route path="*" element={<MainPage />} /> */}

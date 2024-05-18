@@ -83,6 +83,17 @@ export async function callProductList(lastDoc: number | 0) {
   return products;
 }
 
+export async function searchProductList(search: string) {
+  const productCollection = collection(db, "PRODUCT");
+  const q = query(productCollection, where("productName", ">=", search));
+  const productSnapshot = await getDocs(q);
+  const products: Product[] = [];
+  productSnapshot.forEach((doc) => {
+    products.push(doc.data() as Product);
+  });
+  return products;
+}
+
 export const downloadImage = async (path: string) => {
   try {
     const storage = getStorage();

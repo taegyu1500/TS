@@ -17,8 +17,6 @@ export default function MainLayout() {
         // User is signed in
         // You can retrieve the user object here if needed
       }
-      // User is signed out
-      // Update state here if needed
       setLoading(false);
     });
 
