@@ -69,3 +69,44 @@ password: admin12345
 ## 프로젝트 개발환경
 
 React(17.0.2), Typescript(4.4.3), react-query(3.21.0), react-router-dom(5.3.0)
+
+## 해결된 이슈
+
+- [o] 로그인 유지
+
+```
+localStorage에 token을 저장하는 방식을 사용하려 했으나, firebase에 해당 기능을 지원하는 것을 보고 적용.
+setPersistence을 통해 로그인 전에 로그인을 유지하도록 만들고 로그아웃을 하지 않는 한 계속 로그인 상태를 유지함
+
+문제발생: 새로고침 시 한번의 로그인 과정이 필요함
+해결: 최상위 컴포넌트인 mainLayout에서 로그인 상태를 체크(useEffect, useState)하고, 해당 체크 중에는 loading...이 보여지게 하여 해결.
+```
+
+- [o] 레이아웃
+
+```
+문제: 레이아웃이 중앙에 뭉쳐있고 화면 바깥에 렌더링 되거나 내용없이 스크롤바를 만드는 등의 문제 발생
+해결: 헤더와 내용을 포함시키던 bodyLayout.tsx 파일 내 css가 문제였고, 해당 파일을 삭제하고 mainLayout에 <div></div>를 만들고 하드코딩하여 해결함.
+```
+
+- [o] 로그인이 안됨에도 불구하고 로그인 로직을 통과함
+
+```
+문제: firebase에서 에러를 리턴했음에도 불구하고 성공 로직을 탐
+해결: firebase에서 에러를 리턴하면 해당 에러를 catch하게 하여 진행을 막고, 추가로 setPersistence를 return 시키고 이후에 작업되게 하여 유지 안됨 문제 추가 해결
+```
+
+- [o] toast 위치 문제
+
+```
+문제: toast가 화면 중앙 위쪽에 렌더링 되어야 하는데 화면 중앙 아래에 렌더링 됨
+해결: shadcn-ui의 toast ui component 내부 tailwindcss를 적용하는 부분을 수정하여 해결
+미해결: toast가 렌더링 될 때 추가 prop을 받아서 alert, error, success 등을 구현해야 함. 해당 내용을 위해선 shadcn-ui의 toast ui component를 뜯어보고 수정해야함
+```
+
+- [o] 미사용 파일 삭제
+
+```
+문제: 사용할 것이라고 예상해놓고 만든 파일이 많아 불필요한 파일들이 감지됨
+해결: firebase연동 원본함수 파일들을 제외한 불필요한 파일들을 모두 삭제함. 해당 원본함수들은 import하는 곳이 많아 당장은 삭제하지 않았고, 차후 util/firebasFunctions에 모아두었기 때문에 import 경로들을 모두 수정하여 레퍼런스되지 않음을 확인하고 삭제할 예정
+```
