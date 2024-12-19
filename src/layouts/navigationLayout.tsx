@@ -1,13 +1,21 @@
+import { Button } from "@/components/ui/button";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase";
+import { useEffect, useState, useContext } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { ModalContext } from "@/context/ModalContext";
+
 export default function NavigationLayout() {
-  return (
-    <div>
-      <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
-        <nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
-          {/* 메뉴 아이콘 및 메뉴 반복문 */}
-        </nav>
-      </aside>
-    </div>
-  );
+  const Navigate = useNavigate();
+  const context = useContext(ModalContext);
+  const location = useLocation();
+  const openModal = () => {
+    if (!context)
+      throw new Error("useModal must be used within a ModalProvider");
+    console.log("openModal");
+    context.openModal("PendingPage", "alert");
+  };
+  return <nav className="bg-white border-b"></nav>;
 }
 
 // Path: src/layouts/navigationLayout.tsx

@@ -8,6 +8,7 @@ import { auth } from "@/firebase";
 import { useEffect, useState } from "react";
 import { ModalProvider } from "@/context/ModalContext";
 import QueryContext from "@/context/QueryContext";
+import NavigationLayout from "./navigationLayout";
 export default function MainLayout() {
   const [loading, setLoading] = useState(true);
 
@@ -30,11 +31,12 @@ export default function MainLayout() {
   return (
     <div className="w-full mx-auto box-border">
       <Toaster />
-      <div className="flex flex-col min-h-screen w-full bg-muted/40 mx-auto">
+      <div className="flex min-h-screen w-full bg-muted/40 mx-auto">
         {/* <NavigationLayout /> */}
         <QueryContext>
           <ModalProvider>
-            <div className="flex flex-col min-h-screen min-w-screen">
+            <NavigationLayout />
+            <div className="flex flex-col flex-1 min-h-screen ml-32">
               <HeaderLayout />
               <OutletLayout />
             </div>

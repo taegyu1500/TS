@@ -7,7 +7,8 @@ export default function Titlelayout() {
   };
   return (
     <div onClick={click}>
-      <h1>PH</h1>
+      <div className="text-lg font-bold text-gray-800">N</div>
+      <div className="text-sm text-gray-600">네이버페이</div>
     </div>
   );
 }

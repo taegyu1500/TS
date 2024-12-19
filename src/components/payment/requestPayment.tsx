@@ -22,7 +22,7 @@ async function requestPayment({
       return response;
     } else {
       console.log(response);
-      throw new Error("결재 실패");
+      throw new Error("결제 실패 or 테스트 결제 완료");
     }
   } catch (error) {
     console.error("결제 요청 중 오류 발생:", error);

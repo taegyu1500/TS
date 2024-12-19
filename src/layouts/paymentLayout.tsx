@@ -41,7 +41,7 @@ const PaymentLayout = () => {
       });
 
       if (response instanceof Error) {
-        console.error("결재 실패");
+        console.error("결제 실패");
         return;
       }
 
