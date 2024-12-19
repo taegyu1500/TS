@@ -35,9 +35,9 @@ export default function MainLayout() {
         {/* <NavigationLayout /> */}
         <QueryContext>
           <ModalProvider>
-            <NavigationLayout />
-            <div className="flex flex-col flex-1 min-h-screen ml-32">
+            <div className="w-full flex flex-col">
               <HeaderLayout />
+              <NavigationLayout />
               <OutletLayout />
             </div>
           </ModalProvider>
