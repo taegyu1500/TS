@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TextInput } from "@/components/inputs/textInput";
 import { useNavigate } from "react-router-dom";
-import { login } from "@/util/firebaseFunctions";
+import { login, googleLogin } from "@/util/firebaseFunctions";
 import GenericForm from "@/components/common/GenericForm";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -28,6 +28,20 @@ export default function LoginPage() {
         console.error(error);
       });
   };
+  const googleLoginButtonClick = () => {
+    googleLogin()
+      .then(() => {
+        console.log("로그인 성공!");
+        Navigate("/");
+      })
+      .catch((error) => {
+        toast({
+          title: "로그인 실패",
+          description: "구글 로그인에 실패했습니다.",
+        });
+        console.error(error);
+      });
+  };
 
   return (
     <div className="flex justify-center items-center overflow-hidden">
@@ -49,7 +63,12 @@ export default function LoginPage() {
         <Button type="submit" className="w-full">
           로그인
         </Button>
-        <Button variant="outline" className="w-full" type="button">
+        <Button
+          variant="outline"
+          className="w-full"
+          type="button"
+          onClick={googleLoginButtonClick}
+        >
           구글로 로그인하기
         </Button>
         <div className="mt-4 text-center text-sm">
