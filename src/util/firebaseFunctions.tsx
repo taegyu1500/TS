@@ -173,17 +173,15 @@ export async function getUser(uid: string) {
   return docSnap.data();
 }
 
-export const login = (email: string, password: string) => {
-  return setPersistence(auth, browserLocalPersistence)
-    .then(() => {
-      console.log("login", browserLocalPersistence);
-      return signInWithEmailAndPassword(auth, email, password);
-    })
-    .catch((error) => {
-      console.log("errorCode", error.code);
-      console.log("errorMessage", error.message);
-      throw error;
-    });
+export const login = async (email: string, password: string) => {
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    console.log("login", browserLocalPersistence);
+    return await signInWithEmailAndPassword(auth, email, password);
+  } catch (error) {
+    console.log("errorCode", error);
+    throw error;
+  }
 };
 
 export const logout = async () => {

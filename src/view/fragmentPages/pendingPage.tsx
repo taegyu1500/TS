@@ -4,6 +4,7 @@ import PendingTableLayout from "@/layouts/pendingTableLayout";
 import { useQuery } from "react-query";
 import { callShoppingList } from "@/util/firebaseFunctions";
 import { auth } from "@/firebase";
+import PriceFormat from "./priceFormat";
 
 const MemorizedPendingTableLayout = React.memo(PendingTableLayout);
 
@@ -24,7 +25,11 @@ export default function PendingPage() {
         <div>상품이 없습니다</div>
       )}
       <Separator />
-      {totalPrice && <div>총 가격:{totalPrice}원</div>}
+      {totalPrice && (
+        <div>
+          총 가격: <PriceFormat price={totalPrice} />
+        </div>
+      )}
     </React.Fragment>
   );
 }

@@ -8,6 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useNavigate } from "react-router-dom";
+import PriceFormat from "@/view/fragmentPages/priceFormat";
 interface ProductListProps {
   products: Product[];
 }
@@ -42,7 +43,9 @@ export default function ProductList({ products }: ProductListProps) {
               {product.productName}
             </TableCell>
             <TableCell>{product.productQuantity}</TableCell>
-            <TableCell>{product.productPrice}</TableCell>
+            <TableCell>
+              <PriceFormat price={product.productPrice} />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

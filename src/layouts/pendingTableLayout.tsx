@@ -7,45 +7,18 @@ import {
   TableHeader,
 } from "@/components/ui/table";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import {
-  callShoppingList,
-  updateShoppingQuantity,
-  deleteShoppingList,
-} from "@/util/firebaseFunctions";
+import { callShoppingList, deleteShoppingList } from "@/util/firebaseFunctions";
 import { auth } from "@/firebase";
 import { Button } from "@/components/ui/button";
+import PriceFormat from "@/view/fragmentPages/priceFormat";
 
 const PendingTableLayout = () => {
   const queryClient = useQueryClient();
-  const { data: shoppingList, refetch } = useQuery("shoppingList", () =>
+  const { data: shoppingList } = useQuery("shoppingList", () =>
     callShoppingList(auth.currentUser?.uid || "")
   );
-  const updateMutation = useMutation((data: { id: string; delta: number }) =>
-    updateShoppingQuantity(data.id, data.delta)
-  );
-  const deleteMutation = useMutation(deleteShoppingList);
 
-  const handleQuantityChange = (id: string, delta: number) => {
-    console.log(
-      "handleQuantityChange called with id:",
-      id,
-      "and delta:",
-      delta
-    );
-    updateMutation.mutate(
-      { id, delta },
-      {
-        onSuccess: () => {
-          console.log("onSuccess called");
-          refetch();
-        },
-        onError: (error) => {
-          console.log("onError called");
-          console.error(error);
-        },
-      }
-    );
-  };
+  const deleteMutation = useMutation(deleteShoppingList);
 
   const handleDelete = (id: string) => {
     deleteMutation.mutate(id, {
@@ -75,28 +48,12 @@ const PendingTableLayout = () => {
               {location.pathname === "/payment" ? (
                 shopping.quantity
               ) : (
-                <>
-                  <Button
-                    onClick={() =>
-                      shopping.id &&
-                      handleQuantityChange(shopping.id.toString(), -1)
-                    }
-                  >
-                    -
-                  </Button>
-                  {shopping.quantity}
-                  <Button
-                    onClick={() =>
-                      shopping.id &&
-                      handleQuantityChange(shopping.id.toString(), 1)
-                    }
-                  >
-                    +
-                  </Button>
-                </>
+                <Button disabled>{shopping.quantity}</Button>
               )}
             </TableCell>
-            <TableCell>{shopping.productPrice * shopping.quantity}</TableCell>
+            <TableCell>
+              <PriceFormat price={shopping.productPrice * shopping.quantity} />
+            </TableCell>
             {location.pathname === "/payment" ? null : (
               <TableCell>
                 <Button

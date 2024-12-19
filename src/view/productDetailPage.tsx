@@ -8,6 +8,7 @@ import addShoppingList from "@/components/firebase/addShoppingList";
 import { auth } from "@/firebase";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import PriceFormat from "./fragmentPages/priceFormat";
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -80,12 +81,14 @@ const ProductDetailPage = () => {
         <Card>
           <CardHeader>가격</CardHeader>
           <CardContent>
-            <p>{product.productPrice}</p>
+            <PriceFormat price={product.productPrice} />
           </CardContent>
         </Card>
         <Card>
           <CardContent>
-            <Button onClick={handleAddShoppingList}>장바구니에 담기</Button>
+            <div className="flex justify-center">
+              <Button onClick={handleAddShoppingList}>장바구니에 담기</Button>
+            </div>
           </CardContent>
         </Card>
       </div>
