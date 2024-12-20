@@ -14,5 +14,6 @@ export const useAuth = () => {
   }, []);
 
   const isLogged = currentUser !== null;
-  return { currentUser, isLogged };
+  const logout = () => auth.signOut();
+  return { currentUser, isLogged, logout };
 };

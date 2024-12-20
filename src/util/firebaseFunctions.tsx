@@ -87,7 +87,7 @@ export async function callProductList(lastDoc: number | 0) {
 
 export async function searchProductList(search: string) {
   const productCollection = collection(db, "PRODUCT");
-  const q = query(productCollection, where("productName", ">=", search));
+  const q = query(productCollection, where("productName", "<=", search));
   const productSnapshot = await getDocs(q);
   const products: Product[] = [];
   productSnapshot.forEach((doc) => {
@@ -391,7 +391,7 @@ export const googleLogin = async () => {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const token = credential?.accessToken;
       const user = result.user;
-      console.log(user, token);
+      console.log(token, user);
     })
     .catch((error) => {
       const errorCode = error.code;

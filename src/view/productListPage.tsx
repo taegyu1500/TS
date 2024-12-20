@@ -6,9 +6,10 @@ import { checkUserSeller } from "@/util/firebaseFunctions";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { auth } from "@/firebase";
+import CardListLayout from "@/layouts/cardListLayout";
 
 export default function ProductListPage() {
-  const [products, setProducts] = useState<Product[]>([]); // Specify the type as Product[]
+  const [products, setProducts] = useState<Product[]>([]);
   const [isSeller, setIsSeller] = useState<boolean>(false);
   const navigate = useNavigate();
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function ProductListPage() {
     });
   }, []);
   useEffect(() => {
-    if (!isSeller || auth.currentUser === null) return; // Replace '=' with '==='
+    if (!isSeller || auth.currentUser === null) return;
     checkUserSeller().then((data) => {
       setIsSeller(data);
     });
@@ -29,6 +30,9 @@ export default function ProductListPage() {
     <div className="flex flex-col w-full h-full box-border">
       <div className="flex-grow">
         <ProductList products={products} />
+      </div>
+      <div>
+        <CardListLayout products={products} />
       </div>
       {isSeller && (
         <div>

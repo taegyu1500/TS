@@ -1,37 +1,39 @@
-import ProductList from "@/components/dataVisual/ProductList";
-import { searchProductList } from "@/util/firebaseFunctions";
-import Product from "@/type/Product";
-import { useEffect, useState } from "react";
-import { checkUserSeller } from "@/util/firebaseFunctions";
-import { Button } from "@/components/ui/button";
 import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import ProductList from "@/components/dataVisual/ProductList";
+import { searchProductList, checkUserSeller } from "@/util/firebaseFunctions";
+import Product from "@/type/Product";
+import { Button } from "@/components/ui/button";
 import { auth } from "@/firebase";
 
 export default function SearchList() {
-  const [products, setProducts] = useState<Product[]>([]); // Specify the type as Product[]
+  const [products, setProducts] = useState<Product[]>([]);
   const [isSeller, setIsSeller] = useState<boolean>(false);
   const navigate = useNavigate();
   const { keyword } = useParams();
+
   useEffect(() => {
     console.log(keyword);
-    if (!keyword) return; // Add a check to ensure that the keyword is not undefined
+    if (!keyword) return;
     searchProductList(keyword).then((data) => {
       if (data) {
         console.log(data);
         setProducts(data);
       }
     });
-  }, [keyword]); // Update the dependency array to include keyword
+  }, [keyword]);
+
   useEffect(() => {
-    if (!isSeller || auth.currentUser === null) return; // Replace '=' with '==='
+    if (!isSeller || auth.currentUser === null) return;
     checkUserSeller().then((data) => {
       setIsSeller(data);
     });
   }, [isSeller]);
+
   return (
     <div className="flex flex-col w-full h-full box-border">
       <div className="flex-grow">
-        <ProductList products={products} />
+        {keyword && <ProductList products={products} />}
       </div>
       {isSeller && (
         <div>

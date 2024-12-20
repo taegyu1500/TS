@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Suspense, lazy } from "react";
+import LogoutPage from "@/view/logoutPage";
 
 const LoginPage = lazy(() => import("@/view/loginPage"));
 const MainPage = lazy(() => import("@/view/mainPage"));
@@ -45,8 +46,8 @@ export default function Router() {
             />
             <Route path="search/:keyword" element={<SearchList />} />
             <Route path="*" element={<ErrorPage />} />
+            <Route path="logout" element={<LogoutPage />} />
           </Route>
-          {/* <Route path="*" element={<MainPage />} /> */}
         </Routes>
       </Suspense>
     </BrowserRouter>

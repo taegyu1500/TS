@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { ModalProvider } from "@/context/ModalContext";
 import QueryContext from "@/context/QueryContext";
 import NavigationLayout from "./navigationLayout";
+import SearchCommand from "@/view/fragmentPages/searchCommand";
 export default function MainLayout() {
   const [loading, setLoading] = useState(true);
 
@@ -36,7 +37,11 @@ export default function MainLayout() {
         <QueryContext>
           <ModalProvider>
             <div className="w-full flex flex-col">
-              <HeaderLayout />
+              <HeaderLayout>
+                <div className="fixed z-50 w-1/2 top-3 right">
+                  <SearchCommand />
+                </div>
+              </HeaderLayout>
               <NavigationLayout />
               <OutletLayout />
             </div>

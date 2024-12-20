@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
 import Product from "@/type/Product";
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
 import FirebaseImage from "@/components/common/firebaseImage";
+import { useNavigate } from "react-router-dom";
+import PriceFormat from "@/view/fragmentPages/priceFormat";
 
 interface ProductLayoutProps {
   product: Product;
@@ -9,6 +16,7 @@ interface ProductLayoutProps {
 
 const ProductLayout = ({ product }: ProductLayoutProps) => {
   const [images, setImages] = useState<JSX.Element[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchImages = async () => {
@@ -28,12 +36,19 @@ const ProductLayout = ({ product }: ProductLayoutProps) => {
   }, [product]);
 
   return (
-    <Card>
+    <Card
+      className={"w-1/5 flex flex-col justify-between m-2 hover:cursor-pointer"}
+      onClick={() => {
+        navigate(`/product/${product.id}`);
+      }}
+    >
       <CardHeader>{images}</CardHeader>
       <CardContent>
-        <p>{product.productQuantity}</p>
-        <p>{product.productDescription}</p>
+        <p className="overflow-ellipsis">{product.productName}</p>
       </CardContent>
+      <CardFooter>
+        <PriceFormat price={product.productPrice} />
+      </CardFooter>
     </Card>
   );
 };
