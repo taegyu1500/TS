@@ -374,11 +374,11 @@ export const checkUserSeller = async () => {
   if (!user) {
     throw new Error("User not found");
   }
-
   const q = query(collection(db, "USER"), where("email", "==", user.email));
   const querySnapshot = await getDocs(q);
   let isSeller = false;
   querySnapshot.forEach((doc) => {
+    console.log(doc.data());
     isSeller = doc.data().isSeller;
   });
 

@@ -21,34 +21,46 @@ export default function ProductList({ products }: ProductListProps) {
   };
   return (
     <Table>
-      <TableHeader>
+      {products.length === 0 ? (
         <TableRow>
-          <TableHead>카테고리</TableHead>
-          <TableHead>이름</TableHead>
-          <TableHead>수량</TableHead>
-          <TableHead>가격</TableHead>
+          <TableCell colSpan={4} className="text-center">
+            {" "}
+            등록된 상품이 없습니다.{" "}
+          </TableCell>
         </TableRow>
-      </TableHeader>
-      <TableBody>
-        {products.map((product) => (
-          <TableRow
-            key={product.id?.toString() ?? ""}
-            onClick={() => handleClick(product.id?.toString() ?? "")}
-          >
-            {/* <TableCell>{product.productImage}</TableCell> */}
-            <TableCell>{product.productCategory}</TableCell>
-            <TableCell
-              onClick={() => handleClick(product.id?.toString() ?? "")}
-            >
-              {product.productName}
-            </TableCell>
-            <TableCell>{product.productQuantity}</TableCell>
-            <TableCell>
-              <PriceFormat price={product.productPrice} />
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
+      ) : (
+        <>
+          {" "}
+          <TableHeader>
+            <TableRow>
+              <TableHead>카테고리</TableHead>
+              <TableHead>이름</TableHead>
+              <TableHead>수량</TableHead>
+              <TableHead>가격</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow
+                key={product.id?.toString() ?? ""}
+                onClick={() => handleClick(product.id?.toString() ?? "")}
+              >
+                {/* <TableCell>{product.productImage}</TableCell> */}
+                <TableCell>{product.productCategory}</TableCell>
+                <TableCell
+                  onClick={() => handleClick(product.id?.toString() ?? "")}
+                >
+                  {product.productName}
+                </TableCell>
+                <TableCell>{product.productQuantity}</TableCell>
+                <TableCell>
+                  <PriceFormat price={product.productPrice} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </>
+      )}
     </Table>
   );
 }
