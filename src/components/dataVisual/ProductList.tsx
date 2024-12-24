@@ -44,6 +44,7 @@ export default function ProductList({ products }: ProductListProps) {
               <TableRow
                 key={product.id?.toString() ?? ""}
                 onClick={() => handleClick(product.id?.toString() ?? "")}
+                className="hover:cursor-pointer"
               >
                 {/* <TableCell>{product.productImage}</TableCell> */}
                 <TableCell>{product.productCategory}</TableCell>

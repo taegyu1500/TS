@@ -38,7 +38,7 @@ export default function MainLayout() {
           <ModalProvider>
             <div className="w-full flex flex-col">
               <HeaderLayout>
-                <div className="fixed z-50 w-1/2 top-3 right">
+                <div className=" top-3 w-1/2">
                   <SearchCommand />
                 </div>
               </HeaderLayout>

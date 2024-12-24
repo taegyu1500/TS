@@ -131,16 +131,21 @@ export async function getCurrentUserId() {
   return userId;
 }
 
-export const getProduct = async () => {
+export const getProduct = async (amount?: number = 10) => {
   try {
-    const querySnapshot = await getDocs(query(collection(db, "PRODUCT")));
-    console.log(querySnapshot);
+    const productQuery = query(
+      collection(db, "PRODUCT"),
+      orderBy("updatedAt", "desc"),
+      limit(amount)
+    );
+    const querySnapshot = await getDocs(productQuery);
     if (querySnapshot.empty) return [];
     const data: Product[] = [];
     querySnapshot.forEach((doc) => {
       data.push({ id: doc.id, ...doc.data() } as Product);
     });
-    return data;
+    console.log([data, querySnapshot.docs.length]);
+    return [data, querySnapshot.docs.length];
   } catch (error) {
     console.error("Error getting product: ", error);
     throw error;
@@ -162,6 +167,22 @@ export async function getProductsInShoppingList() {
   const querySnapshot = await getDocs(q);
   const products = [] as Product[];
   querySnapshot.forEach((doc) => {
+    products.push(doc.data() as Product);
+  });
+  return products;
+}
+
+export async function getProductsByPage(page: number, amount?: number = 10) {
+  const productCollection = collection(db, "PRODUCT");
+  const q = query(
+    productCollection,
+    orderBy("date", "desc"),
+    limit(amount),
+    startAfter(page * amount)
+  );
+  const productSnapshot = await getDocs(q);
+  const products: Product[] = [];
+  productSnapshot.forEach((doc) => {
     products.push(doc.data() as Product);
   });
   return products;

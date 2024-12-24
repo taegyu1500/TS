@@ -38,7 +38,7 @@ const ProductRegisterPage = () => {
       description,
       quantity: Number(quantity),
       price,
-      name: `[${category}] ${description}`,
+      name: ` ${description}`,
       Images: files.length ? Array.from(files).map((file) => file.name) : [],
     };
     try {
