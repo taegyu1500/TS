@@ -16,9 +16,9 @@ export default function ProductListPage() {
   const [listType, setListType] = useState<"list" | "card">("list");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const navigate = useNavigate();
-  const { isSeller: authIsSeller } = useAuth();
-  const [isSeller, setIsSeller] = useState<boolean>(false);
-
+  const { isSeller } = useAuth();
+  // const [isSeller, setIsSeller] = useState<boolean>(false);
+  console.log(isSeller);
   useEffect(() => {
     getProduct().then((data) => {
       if (data) {
@@ -28,9 +28,6 @@ export default function ProductListPage() {
       }
     });
   }, []);
-  useEffect(() => {
-    authIsSeller.then((result) => setIsSeller(result ?? false));
-  }, [authIsSeller]);
 
   const filterProduct = (category: string | null) => {
     if (category) {

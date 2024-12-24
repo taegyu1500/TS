@@ -50,7 +50,6 @@ const RegisterPage = () => {
     const isSeller = data.button === "Seller"; // data.button의 값이 "Seller"인지 확인합니다.
     register(data.email, data.password, data.nickname, isSeller) // isSeller 값을 register 함수에 전달합니다.
       .then(() => {
-        console.log("회원 가입 성공!");
         Navigate("/");
       });
   };

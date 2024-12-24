@@ -22,15 +22,15 @@ export default function ProductList({ products }: ProductListProps) {
   return (
     <Table>
       {products.length === 0 ? (
-        <TableRow>
-          <TableCell colSpan={4} className="text-center">
-            {" "}
-            등록된 상품이 없습니다.{" "}
-          </TableCell>
-        </TableRow>
+        <TableBody>
+          <TableRow>
+            <TableCell colSpan={4} className="text-center">
+              등록된 상품이 없습니다.
+            </TableCell>
+          </TableRow>
+        </TableBody>
       ) : (
         <>
-          {" "}
           <TableHeader>
             <TableRow>
               <TableHead>카테고리</TableHead>

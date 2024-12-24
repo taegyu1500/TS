@@ -378,7 +378,6 @@ export const checkUserSeller = async () => {
   const querySnapshot = await getDocs(q);
   let isSeller = false;
   querySnapshot.forEach((doc) => {
-    console.log(doc.data());
     isSeller = doc.data().isSeller;
   });
 

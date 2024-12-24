@@ -6,12 +6,14 @@ import { useQuery } from "react-query";
 import { callShoppingList } from "@/util/firebaseFunctions";
 import { auth } from "@/firebase";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const PaymentLayout = () => {
   const { data: shoppingList } = useQuery("shoppingList", () =>
     callShoppingList(auth.currentUser?.uid || "")
   );
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const formatDate = (date: Date) => {
     const year = date.getFullYear();
@@ -41,7 +43,10 @@ const PaymentLayout = () => {
       });
 
       if (response instanceof Error) {
-        console.error("결제 실패");
+        toast({
+          title: "결제 실패",
+          description: "결제 중 오류가 발생했거나 테스트 환경입니다 :(",
+        });
         return;
       }
 
@@ -54,7 +59,10 @@ const PaymentLayout = () => {
           Status: "주문 완료",
           id: response.paymentId?.toString() || "", // Add null check for response.paymentId
         }).then(() => {
-          console.log("주문 완료");
+          toast({
+            title: "결제 성공",
+            description: "결제가 성공적으로 완료되었습니다.",
+          });
           navigate("/order");
         });
       }
