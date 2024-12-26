@@ -23,7 +23,7 @@ interface SortOptionsProps {
 export default function SortOptions({
   optionType = "list",
   selectedSortOption,
-  setSelectedSortOption,
+  setSelectSortOption,
   filterProduct,
   resetProduct,
   selectedPagingCount,
@@ -42,7 +42,7 @@ export default function SortOptions({
                 <RadioGroup
                   className="flex flex-row flex-wrap flex-grow"
                   value={selectedSortOption}
-                  onValueChange={(value) => setSelectedSortOption(value)}
+                  onValueChange={(value) => setSelectSortOption(value)}
                 >
                   {["의류", "가전제품", "가구", "생활용품", "식품", "기타"].map(
                     (category) => (
@@ -59,11 +59,8 @@ export default function SortOptions({
               <div className="flex flex-row items-center">
                 <p className="mr-4 w-20">표시 개수</p>
                 <Select
-                  className="w-20"
-                  defalutValue={selectedPagingCount}
-                  onChange={(e) =>
-                    setSelectedPagingCount(Number(e.target.value))
-                  }
+                  defaultValue={selectedPagingCount.toString()}
+                  onValueChange={(value) => setSelectedPagingCount(+value)}
                 >
                   <SelectTrigger className="w-20">
                     <SelectValue placeholder={`${selectedPagingCount}개`} />
@@ -96,7 +93,7 @@ export default function SortOptions({
                 <RadioGroup
                   className="flex flex-col flex-wrap flex-grow mt-4"
                   value={selectedSortOption}
-                  onValueChange={(value) => setSelectedSortOption(value)}
+                  onValueChange={(value) => setSelectSortOption(value)}
                 >
                   {["의류", "가전제품", "가구", "생활용품", "식품", "기타"].map(
                     (category) => (
@@ -112,6 +109,25 @@ export default function SortOptions({
                     )
                   )}
                 </RadioGroup>
+                <div>
+                  <Select
+                    defaultValue="4"
+                    onValueChange={(value) => {
+                      setSelectedPagingCount(+value);
+                    }}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="10개" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {["4", "8", "12", "16", "20"].map((count) => (
+                        <SelectItem key={count} value={count}>
+                          {count}개
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
           </CardContent>

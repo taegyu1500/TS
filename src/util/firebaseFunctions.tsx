@@ -27,6 +27,7 @@ import {
   User,
 } from "firebase/auth";
 import Shopping from "@/type/Shopping";
+import { resizeImage } from "./resizeImage";
 
 export async function addShoppingList(product: Product, user: string) {
   try {
@@ -131,7 +132,7 @@ export async function getCurrentUserId() {
   return userId;
 }
 
-export const getProduct = async (amount?: number = 10) => {
+export const getProduct = async (amount: number = 10) => {
   try {
     const productQuery = query(
       collection(db, "PRODUCT"),
@@ -172,20 +173,45 @@ export async function getProductsInShoppingList() {
   return products;
 }
 
-export async function getProductsByPage(page: number, amount?: number = 10) {
-  const productCollection = collection(db, "PRODUCT");
-  const q = query(
-    productCollection,
-    orderBy("date", "desc"),
-    limit(amount),
-    startAfter(page * amount)
-  );
-  const productSnapshot = await getDocs(q);
-  const products: Product[] = [];
-  productSnapshot.forEach((doc) => {
-    products.push(doc.data() as Product);
-  });
-  return products;
+export async function getProductsByPage(page: number, amount: number = 10) {
+  try {
+    const productCollection = collection(db, "PRODUCT");
+    console.log("page", page);
+    let q;
+
+    if (page === 1) {
+      // 첫 번째 페이지의 경우 startAfter를 사용하지 않음
+      q = query(productCollection, orderBy("updatedAt", "desc"), limit(amount));
+    } else {
+      // 이전 페이지의 마지막 문서를 기준으로 시작
+      const previousPageQuery = query(
+        productCollection,
+        orderBy("updatedAt", "desc"),
+        limit((page - 1) * amount)
+      );
+      const previousPageSnapshot = await getDocs(previousPageQuery);
+      const lastVisible =
+        previousPageSnapshot.docs[previousPageSnapshot.docs.length - 1];
+
+      q = query(
+        productCollection,
+        orderBy("updatedAt", "desc"),
+        startAfter(lastVisible),
+        limit(amount)
+      );
+    }
+
+    const productSnapshot = await getDocs(q);
+    const products: Product[] = [];
+    productSnapshot.forEach((doc) => {
+      products.push({ id: doc.id, ...doc.data() } as Product);
+    });
+    console.log("getProductsByPage:", products);
+    return products;
+  } catch (error) {
+    console.error("Error getting products by page: ", error);
+    throw error;
+  }
 }
 
 export async function getUser(uid: string) {
@@ -357,8 +383,13 @@ export const uploadFiles = async (files: FileList | undefined, uid: string) => {
   if (files) {
     for (const file of files) {
       const storageRef = ref(storage, `PRODUCT/${uid}/${file.name}`);
-      await uploadBytes(storageRef, file);
-      storageRefs.push(storageRef);
+      resizeImage(file)
+        .then((resizedFile) => {
+          return uploadBytes(storageRef, resizedFile);
+        })
+        .then(() => {
+          storageRefs.push(storageRef);
+        });
     }
   }
 };
@@ -420,4 +451,24 @@ export const googleLogin = async () => {
       const credential = GoogleAuthProvider.credentialFromError(error);
       console.log(errorCode, errorMessage, email, credential);
     });
+};
+
+export const deleteProduct = async (id: string, temp: boolean = false) => {
+  if (temp) {
+    try {
+      const docRef = doc(db, `PRODUCT/${id}`);
+      await deleteDoc(docRef);
+    } catch (e) {
+      console.error("Error deleting document: ", e);
+    }
+  } else {
+    try {
+      const docRef = doc(db, `PRODUCT/${id}`);
+      await updateDoc(docRef, {
+        isDeleted: true,
+      });
+    } catch (e) {
+      console.error("Error deleting document: ", e);
+    }
+  }
 };

@@ -1,7 +1,7 @@
 import ProductList from "@/components/dataVisual/ProductList";
-import { getProduct } from "@/util/firebaseFunctions";
+import { getProduct, getProductsByPage } from "@/util/firebaseFunctions";
 import Product from "@/type/Product";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import CardListLayout from "@/layouts/cardListLayout";
@@ -14,28 +14,23 @@ export default function ProductListPage() {
   const [listType, setListType] = useState<"list" | "card">("list");
   const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [selectedPagingCount, setSelectedPagingCount] = useState<number>(10);
-  const [target, setTarget] = useState<HTMLDivElement | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPage, setTotalPage] = useState<number>(0);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
   const navigate = useNavigate();
   const { isSeller } = useAuth();
 
-  const scrollRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     getProduct().then(([data]) => {
-      if (data) {
+      if (Array.isArray(data)) {
         setProducts(data);
         setFilteredProducts(data);
-        // setTotalPage(Math.ceil(data.length / pagingSize));
-        // setPagingData(data.slice(0, pagingSize));
-        // setCurrentPage(1);
+        setTotalPage(Math.ceil(data.length / selectedPagingCount));
+        setCurrentPage(1);
       }
     });
-  }, []);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      setTarget(scrollRef.current);
-    }
-  }, [scrollRef]);
+  }, [selectedPagingCount]);
 
   const filterProduct = (category: string | null) => {
     if (category) {
@@ -48,17 +43,45 @@ export default function ProductListPage() {
     }
   };
 
-  useEffect(() => {
-    let observer;
-    if (target) {
-      observer = new IntersectionObserver();
-      observer.observe(target);
+  const scrollLoad = useCallback(() => {
+    console.log("scrollLoad");
+    if (currentPage < totalPage) {
+      getProductsByPage(currentPage + 1, selectedPagingCount).then((data) => {
+        console.log("Fetched data:", data);
+        if (Array.isArray(data) && data.length > 0) {
+          setProducts((prevProducts) => [...prevProducts, ...data]);
+          setFilteredProducts((prevFilteredProducts) => [
+            ...prevFilteredProducts,
+            ...data,
+          ]);
+          setCurrentPage((prevPage) => prevPage + 1);
+        }
+      });
     }
-  }, [target]);
+  }, [currentPage, totalPage, selectedPagingCount]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        scrollLoad();
+      }
+    });
+
+    const currentRef = scrollRef.current;
+    if (currentRef) {
+      observer.observe(currentRef);
+    }
+
+    return () => {
+      if (currentRef) {
+        observer.unobserve(currentRef);
+      }
+    };
+  }, [scrollLoad]);
 
   useEffect(() => {
     getProduct(selectedPagingCount).then(([data]) => {
-      if (data) {
+      if (Array.isArray(data)) {
         setProducts(data);
         setFilteredProducts(data);
       }
@@ -105,7 +128,7 @@ export default function ProductListPage() {
           <SortOptions
             optionType="list"
             selectedSortOption={selectedCategory}
-            setSelectedSortOption={optionChange}
+            setSelectSortOption={optionChange}
             filterProduct={filterProduct}
             resetProduct={resetProduct}
             selectedPagingCount={selectedPagingCount}
@@ -120,13 +143,13 @@ export default function ProductListPage() {
             <SortOptions
               optionType="card"
               selectedSortOption={selectedCategory}
-              setSelectedSortOption={optionChange}
+              setSelectSortOption={optionChange}
               filterProduct={filterProduct}
               resetProduct={resetProduct}
               selectedPagingCount={selectedPagingCount}
               setSelectedPagingCount={setSelectedPagingCount}
             />
-            <div className="w-3/4 p-4 flex flex-wrap flex-row">
+            <div className="w-4/5 p-4 flex flex-wrap flex-row">
               <CardListLayout products={filteredProducts} />
             </div>
           </div>

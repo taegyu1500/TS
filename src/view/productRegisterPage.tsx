@@ -3,7 +3,7 @@ import GenericForm from "@/components/common/GenericForm";
 import RegisterProductSetup from "@/components/formSetup/registerProductSetup";
 import registerProduct from "@/components/firebase/registerProduct";
 import { useNavigate } from "react-router-dom";
-import { uploadFiles } from "@/components/firebase/uploadFile";
+import { uploadFiles, deleteProduct } from "@/util/firebaseFunctions";
 import { useToast } from "@/components/ui/use-toast";
 
 const steps = ["카테고리", "상품 설명", "이미지 등록"];
