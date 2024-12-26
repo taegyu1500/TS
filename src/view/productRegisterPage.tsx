@@ -5,19 +5,22 @@ import registerProduct from "@/components/firebase/registerProduct";
 import { useNavigate } from "react-router-dom";
 import { uploadFiles, deleteProduct } from "@/util/firebaseFunctions";
 import { useToast } from "@/components/ui/use-toast";
+import FormSteps from "@/components/formSetup/formSteps";
+import { Separator } from "@/components/ui/separator";
 
 const steps = ["카테고리", "상품 설명", "이미지 등록"];
 interface FormData {
   category: string;
-  description: string;
+  productName: string;
   quantity: string;
   price: number;
   files: FileList;
+  description: string;
 }
 
 const ProductRegisterPage = () => {
   const navigate = useNavigate();
-  const { Funnel, Step, setStep } = useFunnel(steps[0]);
+  const { Funnel, Step, setStep, currentStep } = useFunnel(steps[0]);
   const { toast } = useToast();
 
   const nextClickHandler = (nextStep: string) => {
@@ -25,7 +28,7 @@ const ProductRegisterPage = () => {
   };
 
   const handleSubmit = async (data: FormData) => {
-    const { category, description, quantity, price, files } = data;
+    const { category, productName, quantity, price, files, description } = data;
     if (category === undefined) {
       toast({
         title: "카테고리 미입력",
@@ -35,11 +38,12 @@ const ProductRegisterPage = () => {
     }
     const product = {
       category,
-      description,
+      productName,
       quantity: Number(quantity),
       price,
-      name: ` ${description}`,
+      name: `${productName}`,
       Images: files.length ? Array.from(files).map((file) => file.name) : [],
+      description,
     };
     try {
       const id = await registerProduct(product);
@@ -71,14 +75,18 @@ const ProductRegisterPage = () => {
   };
 
   return (
-    <GenericForm onSubmit={handleSubmit}>
-      <RegisterProductSetup
-        steps={steps}
-        nextClickHandler={nextClickHandler}
-        Funnel={Funnel}
-        Step={Step}
-      />
-    </GenericForm>
+    <div>
+      <FormSteps steps={steps} currentStep={currentStep} />
+      <Separator />
+      <GenericForm onSubmit={handleSubmit}>
+        <RegisterProductSetup
+          steps={steps}
+          nextClickHandler={nextClickHandler}
+          Funnel={Funnel}
+          Step={Step}
+        />
+      </GenericForm>
+    </div>
   );
 };
 

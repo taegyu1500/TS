@@ -24,7 +24,7 @@ export function SelectInput({ name, ...props }: SelectInputProps) {
       render={({ field }) => (
         <Select {...props} value={field.value}>
           <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="카테고리 선택해주세요!" />
+            <SelectValue placeholder="선택해주세요" />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>

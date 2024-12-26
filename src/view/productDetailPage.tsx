@@ -9,6 +9,7 @@ import { auth } from "@/firebase";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import PriceFormat from "./fragmentPages/priceFormat";
+import { toast } from "@/components/ui/use-toast";
 
 const ProductDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -19,8 +20,11 @@ const ProductDetailPage = () => {
   const handleAddShoppingList = async () => {
     if (product) {
       await addShoppingList(product, auth.currentUser?.uid ?? "").then(() => {
-        console.log("장바구니에 추가되었습니다.");
-        navigate("/product"); // 이 부분은 toast로 대체될 수도 있습니다
+        toast({
+          title: "장바구니에 추가되었습니다.",
+          description: `${product.productName} 장바구니에 추가되었습니다.`,
+        });
+        navigate("/product");
       });
     }
   };
@@ -31,19 +35,13 @@ const ProductDetailPage = () => {
         id ?? ""
       )) as Product | null;
       if (fetchedProduct && "productImage" in fetchedProduct) {
-        console.log(fetchedProduct.productImage); // Add this line
         setProduct(fetchedProduct);
         const imageElements = await Promise.all(
-          fetchedProduct.productImage.map(
-            (image: string) =>
-              FirebaseImage(
-                fetchedProduct.id?.toString() ?? "",
-                image,
-                "normal"
-              ) // Added null check before calling toString()
+          fetchedProduct.productImage.map((image: string) =>
+            FirebaseImage(fetchedProduct.id?.toString() ?? "", image, "normal")
           )
         );
-        console.log(imageElements);
+
         setImages(imageElements);
       }
     }; // Add closing parenthesis here

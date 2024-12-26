@@ -17,7 +17,10 @@ export default function LoginPage() {
   const onSubmit = (data: LoginPageProps) => {
     login(data.email, data.password)
       .then(() => {
-        console.log("로그인 성공!");
+        toast({
+          title: "로그인 성공",
+          description: "로그인에 성공했습니다.",
+        });
         Navigate("/");
       })
       .catch((error) => {

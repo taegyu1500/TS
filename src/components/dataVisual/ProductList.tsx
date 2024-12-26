@@ -35,7 +35,6 @@ export default function ProductList({ products }: ProductListProps) {
             <TableRow>
               <TableHead>카테고리</TableHead>
               <TableHead>이름</TableHead>
-              <TableHead>수량</TableHead>
               <TableHead>가격</TableHead>
             </TableRow>
           </TableHeader>
@@ -53,7 +52,6 @@ export default function ProductList({ products }: ProductListProps) {
                 >
                   {product.productName}
                 </TableCell>
-                <TableCell>{product.productQuantity}</TableCell>
                 <TableCell>
                   <PriceFormat price={product.productPrice} />
                 </TableCell>
