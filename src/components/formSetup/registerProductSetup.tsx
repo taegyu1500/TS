@@ -82,8 +82,49 @@ const RegisterSetup = ({
               <div className="p-6 bg-white rounded-lg shadow-md">
                 <InputFile name="files" />
                 <Separator />
-                <Button type="submit">등록</Button>
+                <Button onClick={() => nextClickHandler(steps[3])}>등록</Button>
               </div>
+            </Step>
+            <Step name="검토">
+              <div className="p-6 bg-white rounded-lg shadow-md">
+                <h3 className="text-xl font-semibold mb-4">
+                  상품 정보를 다시 확인해주세요
+                </h3>
+                <div className="m-2">
+                  <TextInput
+                    label="상품 이름"
+                    id="productName"
+                    placeholder="상품 이름을 입력해주세요"
+                    disabled
+                  />
+                </div>
+                <Separator />
+                <div className="m-2">
+                  <TextInput
+                    label="상품 설명"
+                    id="description"
+                    placeholder="상품에 대한 설명을 입력해주세요"
+                    disabled
+                  />
+                </div>
+                <div className="m-2">
+                  <NumberInput
+                    label="수량"
+                    id="quantity"
+                    placeholder="수량을 입력해주세요"
+                    disabled
+                  />
+                </div>
+                <div className="m-2">
+                  <NumberInput
+                    label="가격"
+                    id="price"
+                    placeholder="가격을 입력해주세요"
+                    disabled
+                  />
+                </div>
+              </div>
+              <Button type="submit">등록</Button>
             </Step>
           </Funnel>
         </div>

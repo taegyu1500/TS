@@ -8,7 +8,7 @@ import { useToast } from "@/components/ui/use-toast";
 import FormSteps from "@/components/formSetup/formSteps";
 import { Separator } from "@/components/ui/separator";
 
-const steps = ["카테고리", "상품 설명", "이미지 등록"];
+const steps = ["카테고리", "상품 설명", "이미지 등록", "검토"];
 interface FormData {
   category: string;
   productName: string;

@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { ModalContext } from "@/context/ModalContext";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 export default function DialogLayout({
   children,
@@ -26,10 +27,12 @@ export default function DialogLayout({
   const { isOpen, closeModal } = dialog;
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onOpenChange={() => closeModal()}>
       <DialogContent>
-        <DialogHeader>{Header}</DialogHeader>
+        <DialogHeader />
+        <DialogTitle>{Header}</DialogTitle>
         {children}
+
         {type === "confirm" ? (
           <DialogFooter>
             <Button onClick={() => closeModal()}>Cancel</Button>
