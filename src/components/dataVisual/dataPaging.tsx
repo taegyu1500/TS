@@ -1,4 +1,12 @@
-export default function DataPaging({ currentPage, totalPage, handlePage }) {
+export default function DataPaging({
+  currentPage,
+  totalPage,
+  handlePage,
+}: {
+  currentPage: number;
+  totalPage: number;
+  handlePage: (page: number) => void;
+}) {
   const pageArray = Array.from({ length: totalPage }, (_, index) => index + 1);
   return (
     <div className="flex justify-center items-center mt-4">

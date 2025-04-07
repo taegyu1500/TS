@@ -84,58 +84,75 @@ export default function SortOptions({
           </CardFooter>
         </Card>
       ) : (
-        <Card>
-          <CardTitle className="ml-5 mt-5">상세 검색</CardTitle>
-          <CardContent>
-            {/* 타입구별할 것 */}
-            <div className="flex flex-col flex-1">
-              <div className="flex flex-row items-center w-full">
+        <Card className="overflow-hidden">
+          <CardTitle className="p-5 bg-gray-50 border-b">상세 검색</CardTitle>
+
+          <CardContent className="p-5">
+            <div className="space-y-6">
+              {/* 카테고리 섹션 */}
+              <div>
+                <h3 className="text-sm font-medium mb-3">카테고리</h3>
                 <RadioGroup
-                  className="flex flex-col flex-wrap flex-grow mt-4"
+                  className="grid grid-cols-2 sm:grid-cols-3 gap-2"
                   value={selectedSortOption}
                   onValueChange={(value) => setSelectSortOption(value)}
                 >
                   {["의류", "가전제품", "가구", "생활용품", "식품", "기타"].map(
                     (category) => (
                       <div
-                        className="flex flex-items-center mr-4"
+                        className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-100 min-h-[40px]"
                         key={category}
                       >
-                        <RadioGroupItem id={category} value={category} />
-                        <Label htmlFor={category} className="ml-2">
+                        <RadioGroupItem
+                          id={`card-${category}`}
+                          value={category}
+                        />
+                        <Label
+                          htmlFor={`card-${category}`}
+                          className="cursor-pointer whitespace-nowrap"
+                        >
                           {category}
                         </Label>
                       </div>
                     )
                   )}
                 </RadioGroup>
-                <div>
-                  <Select
-                    defaultValue="4"
-                    onValueChange={(value) => {
-                      setSelectedPagingCount(+value);
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="10개" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {["4", "8", "12", "16", "20"].map((count) => (
-                        <SelectItem key={count} value={count}>
-                          {count}개
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              </div>
+
+              {/* 표시 개수 섹션 */}
+              <div>
+                <h3 className="text-sm font-medium mb-3">표시 개수</h3>
+                <Select
+                  defaultValue={selectedPagingCount.toString()}
+                  onValueChange={(value) => setSelectedPagingCount(+value)}
+                >
+                  <SelectTrigger className="w-full max-w-[200px]">
+                    <SelectValue placeholder={`${selectedPagingCount}개`} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {["4", "8", "12", "16", "20"].map((count) => (
+                      <SelectItem key={count} value={count}>
+                        {count}개
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </CardContent>
-          <CardFooter className="flex justify-start">
-            <Button onClick={() => filterProduct(selectedSortOption)}>
-              검색
-            </Button>
-            <Button onClick={() => resetProduct()}>초기화</Button>
+
+          <CardFooter className="px-5 py-4 bg-gray-50 border-t flex justify-between">
+            <div className="space-x-2">
+              <Button
+                onClick={() => filterProduct(selectedSortOption)}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                검색
+              </Button>
+              <Button onClick={() => resetProduct()} variant="outline">
+                초기화
+              </Button>
+            </div>
           </CardFooter>
         </Card>
       )}

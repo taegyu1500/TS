@@ -25,7 +25,8 @@ export const usePagination = ({
   const handlePage = (page: number) => {
     if (page === currentPage) return;
     // 페이지 이동 로직
-    setPages(page);
+    // Keep the existing pages array structure
+    setPages((prevPages) => prevPages);
   };
 
   return { pages, handlePage };

@@ -15,6 +15,15 @@ export default function SearchCommand() {
   const navigate = useNavigate();
   const searchInput = useRef<HTMLInputElement>(null);
 
+  const handleSearch = (record: string) => {
+    console.log("handleSearch");
+    if (searchInput.current) {
+      console.log(record);
+      searchInput.current!.value = record;
+      navigate(`/search/${record}`);
+    }
+  };
+
   return (
     <div className="relative w-full z-50">
       <Command
@@ -30,7 +39,9 @@ export default function SearchCommand() {
         <CommandInput
           placeholder="검색어를 입력하세요"
           onFocus={() => setIsFocus(true)}
-          onBlur={() => setIsFocus(false)}
+          onBlur={() => {
+            setTimeout(() => setIsFocus(false), 100);
+          }}
           ref={searchInput}
           className="w-full"
         />
@@ -46,10 +57,16 @@ export default function SearchCommand() {
               <CommandItem>과거 검색어가 없습니다</CommandItem>
             ) : (
               searchRecord.map((record, index) => (
-                <CommandItem key={record.name || index}>
+                <CommandItem
+                  key={record.name || index}
+                  className="cursor-pointer"
+                  value={record.name}
+                  onSelect={() => handleSearch(record.name)}
+                >
                   <div className="flex justify-between w-full">
                     <div>{record.name}</div>
                     <div>{record.date ? record.date.toString() : ""}</div>
+                    {/* <X className="text-gray-400" onClick={() => {}} /> */}
                   </div>
                 </CommandItem>
               ))

@@ -13,7 +13,7 @@ export default function NavigationLayout() {
     if (!context)
       throw new Error("useModal must be used within a ModalProvider");
     console.log("openModal");
-    context.openModal("PendingPage", "alert");
+    context.openModal("PendingPage", "alert", "장바구니");
   };
   return (
     <nav className="bg-white border-b">

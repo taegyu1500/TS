@@ -33,20 +33,22 @@ export default function ProductList({ products }: ProductListProps) {
         <>
           <TableHeader>
             <TableRow>
-              <TableHead>카테고리</TableHead>
+              <TableHead className="w-24 text-left">카테고리</TableHead>
               <TableHead>이름</TableHead>
               <TableHead>가격</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
+            {products.map((product, index) => (
               <TableRow
-                key={product.id?.toString() ?? ""}
+                key={product.id?.toString() ?? index}
                 onClick={() => handleClick(product.id?.toString() ?? "")}
                 className="hover:cursor-pointer"
               >
                 {/* <TableCell>{product.productImage}</TableCell> */}
-                <TableCell>{product.productCategory}</TableCell>
+                <TableCell className="w-24 text-left truncate">
+                  {product.productCategory}
+                </TableCell>
                 <TableCell
                   onClick={() => handleClick(product.id?.toString() ?? "")}
                 >
