@@ -211,11 +211,11 @@ export default function ProductListPage() {
         )}
       </div>
 
-      {/* 리스트 뷰 */}
-      {listType === "list" && (
-        <div className="flex-grow">
+      {/* 통합된 뷰 레이아웃 */}
+      <div className="flex flex-col">
+        <div className="flex w-full">
+          {/* 공통 SortOptions */}
           <SortOptions
-            optionType="list"
             selectedSortOption={selectedCategory}
             setSelectSortOption={setSelectedCategory}
             filterProduct={filterProduct}
@@ -223,51 +223,28 @@ export default function ProductListPage() {
             selectedPagingCount={selectedPagingCount}
             setSelectedPagingCount={setSelectedPagingCount}
           />
-          <ProductList products={filteredProducts} />
 
-          {/* 스크롤 감지 요소 높이 증가 및 항상 표시 */}
-          <div
-            ref={scrollRef}
-            className="w-full h-20 flex items-center justify-center my-4"
-          >
-            {loading && <div>로딩 중...</div>}
-            {!hasMore && filteredProducts.length > 0 && (
-              <div className="text-gray-400">모든 상품을 불러왔습니다</div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* 카드 뷰 */}
-      {listType === "card" && (
-        <div className="flex flex-col">
-          <div className="flex w-full">
-            <SortOptions
-              optionType="card"
-              selectedSortOption={selectedCategory}
-              setSelectSortOption={setSelectedCategory}
-              filterProduct={filterProduct}
-              resetProduct={resetProduct}
-              selectedPagingCount={selectedPagingCount}
-              setSelectedPagingCount={setSelectedPagingCount}
-            />
-            <div className="w-4/5 p-4">
+          {/* 컨텐츠 영역 - 조건부 렌더링 */}
+          <div className="w-4/5 p-4">
+            {listType === "list" ? (
+              <ProductList products={filteredProducts} />
+            ) : (
               <CardListLayout products={filteredProducts} />
-            </div>
-          </div>
-
-          {/* 스크롤 감지 요소 높이 증가 및 항상 표시 */}
-          <div
-            ref={scrollRef}
-            className="w-full h-20 flex items-center justify-center my-4"
-          >
-            {loading && <div>로딩 중...</div>}
-            {!hasMore && filteredProducts.length > 0 && (
-              <div className="text-gray-400">모든 상품을 불러왔습니다</div>
             )}
           </div>
         </div>
-      )}
+
+        {/* 공통 스크롤 감지 요소 */}
+        <div
+          ref={scrollRef}
+          className="w-full h-20 flex items-center justify-center my-4"
+        >
+          {loading && <div>로딩 중...</div>}
+          {!hasMore && filteredProducts.length > 0 && (
+            <div className="text-gray-400">모든 상품을 불러왔습니다</div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
