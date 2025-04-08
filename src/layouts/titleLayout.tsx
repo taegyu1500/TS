@@ -7,7 +7,10 @@ export default function Titlelayout() {
     navigate("/");
   };
   return (
-    <div onClick={click} className="h-16 w-16 flex items-center justify-center">
+    <div
+      onClick={click}
+      className="h-16 w-16 flex items-center justify-center hover:bg-gray-100 cursor-pointer"
+    >
       <img src={logo} alt="Logo" />
     </div>
   );

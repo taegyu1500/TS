@@ -8,7 +8,6 @@ import { auth } from "@/firebase";
 import { useEffect, useState } from "react";
 import { ModalProvider } from "@/context/ModalContext";
 import QueryContext from "@/context/QueryContext";
-import NavigationLayout from "./navigationLayout";
 import SearchCommand from "@/view/fragmentPages/searchCommand";
 export default function MainLayout() {
   const [loading, setLoading] = useState(true);
@@ -42,7 +41,7 @@ export default function MainLayout() {
                   <SearchCommand />
                 </div>
               </HeaderLayout>
-              <NavigationLayout />
+              {/* <NavigationLayout /> */}
               <OutletLayout />
             </div>
           </ModalProvider>

@@ -17,7 +17,7 @@ export default function ProductList({ products }: ProductListProps) {
   const Navigate = useNavigate();
   const handleClick = (id: string) => {
     console.log(id);
-    Navigate(`${id}`);
+    Navigate(`/product/${id}`);
   };
   return (
     <Table>

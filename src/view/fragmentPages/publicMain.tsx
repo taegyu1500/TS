@@ -13,6 +13,9 @@ export default function PublicMain() {
       <Button className="btn" onClick={() => Navigate("/product")}>
         상품 보러가기
       </Button>
+      <Button className="btn" onClick={() => Navigate("/login")}>
+        로그인 하러가기
+      </Button>
     </Fragment>
   );
 }

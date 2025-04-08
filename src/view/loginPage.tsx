@@ -76,7 +76,7 @@ export default function LoginPage() {
         </Button>
         <div className="mt-4 text-center text-sm">
           아이디가 없으신가요?
-          <Link to="/register" className="underline">
+          <Link to="/signup" className="underline">
             회원 가입
           </Link>
         </div>

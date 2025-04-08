@@ -87,14 +87,40 @@ export async function callProductList(lastDoc: number | 0) {
 }
 
 export async function searchProductList(search: string) {
-  const productCollection = collection(db, "PRODUCT");
-  const q = query(productCollection, where("productName", "<=", search));
-  const productSnapshot = await getDocs(q);
-  const products: Product[] = [];
-  productSnapshot.forEach((doc) => {
-    products.push(doc.data() as Product);
-  });
-  return products;
+  if (!search.trim()) {
+    return [];
+  }
+
+  try {
+    // 검색어 정규화 - 공백 제거하고 소문자로 변환
+    const searchTerm = search.trim();
+
+    // 방법 1: 모든 제품을 가져와서 클라이언트에서 필터링
+    // 데이터가 많지 않은 경우에 적합
+    const productCollection = collection(db, "PRODUCT");
+    const productSnapshot = await getDocs(productCollection);
+
+    const products: Product[] = [];
+
+    productSnapshot.forEach((doc) => {
+      const product = { ...doc.data(), id: doc.id } as Product;
+
+      // 제품명이나 설명에 검색어가 포함되어 있는지 확인
+      if (
+        //@ts-expect-error
+        product.productName.includes(searchTerm) ||
+        (product.productDescription &&
+          product.productDescription.includes(searchTerm))
+      ) {
+        products.push(product);
+      }
+    });
+
+    return products;
+  } catch (error) {
+    console.error("한글 검색 중 오류 발생:", error);
+    return [];
+  }
 }
 
 export const downloadImage = async (path: string) => {

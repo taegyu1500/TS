@@ -58,7 +58,7 @@ export default function SearchCommand() {
             ) : (
               searchRecord.map((record, index) => (
                 <CommandItem
-                  key={record.name || index}
+                  key={record.name + index}
                   className="cursor-pointer"
                   value={record.name}
                   onSelect={() => handleSearch(record.name)}
