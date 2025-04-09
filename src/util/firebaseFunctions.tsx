@@ -28,6 +28,7 @@ import {
 } from "firebase/auth";
 import Shopping from "@/type/Shopping";
 import { resizeImage } from "./resizeImage";
+import Order from "@/type/Order.ts";
 
 export async function addShoppingList(product: Product, user: string) {
   try {
@@ -107,7 +108,7 @@ export async function searchProductList(search: string) {
 
       // 제품명이나 설명에 검색어가 포함되어 있는지 확인
       if (
-        //@ts-expect-error
+        //@ts-expect-error 정상작동함
         product.productName.includes(searchTerm) ||
         (product.productDescription &&
           product.productDescription.includes(searchTerm))
@@ -240,11 +241,32 @@ export async function getProductsByPage(page: number, amount: number = 10) {
   }
 }
 
-export async function getUser(uid: string) {
-  const docRef = doc(db, `user/${uid}`);
-  const docSnap = await getDoc(docRef);
-  return docSnap.data();
-}
+// firebaseFunctions.tsx에서 getUser 함수 확인:
+export const getUser = async (userId: string | undefined) => {
+  if (!userId) return null;
+
+  try {
+    // id 필드를 기준으로 쿼리
+    const q = query(collection(db, "USER"), where("id", "==", userId));
+    const querySnapshot = await getDocs(q);
+
+    console.log("Firestore 쿼리 결과 개수:", querySnapshot.size);
+
+    if (querySnapshot.empty) {
+      console.log("사용자 문서가 존재하지 않습니다");
+      return null;
+    }
+
+    // 첫 번째 문서 데이터 반환
+    const userDoc = querySnapshot.docs[0];
+    console.log("Firestore 문서 데이터:", userDoc.data());
+
+    return userDoc.data();
+  } catch (error) {
+    console.error("사용자 정보 조회 오류:", error);
+    return null;
+  }
+};
 
 export const login = async (email: string, password: string) => {
   try {
@@ -496,5 +518,35 @@ export const deleteProduct = async (id: string, temp: boolean = false) => {
     } catch (e) {
       console.error("Error deleting document: ", e);
     }
+  }
+};
+
+// getOrderByUserId 함수 수정
+export const getOrderByUserId = async (userId: string | undefined) => {
+  // userId가 없으면 빈 배열 반환
+  if (!userId) return [];
+
+  try {
+    const q = query(
+      collection(db, "ORDER"),
+      where("buyerId", "==", userId),
+      orderBy("createdAt", "desc")
+    );
+
+    const querySnapshot = await getDocs(q);
+    const orders: Order[] = [];
+
+    querySnapshot.forEach((doc) => {
+      // id 필드 추가 및 타입 안전성 강화
+      orders.push({
+        id: doc.id,
+        ...doc.data(),
+      } as Order);
+    });
+
+    return orders;
+  } catch (error) {
+    console.error("주문 내역 조회 오류:", error);
+    return []; // 오류 발생시 빈 배열 반환
   }
 };

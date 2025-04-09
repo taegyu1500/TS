@@ -3,16 +3,19 @@ import { getProduct } from "@/util/firebaseFunctions";
 import Product from "@/type/Product";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import CardListLayout from "@/layouts/cardListLayout";
 import { useAuth } from "@/hook/useAuth";
 import SortOptions from "@/components/dataVisual/sortOptions";
 
 export default function ProductListPage() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
-  const [listType, setListType] = useState<"list" | "card">("list");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [listType, setListType] = useState<"list" | "card">("card");
+  const [selectedCategory, setSelectedCategory] = useState<string>(
+    searchParams.get("category") || ""
+  );
   const [selectedPagingCount, setSelectedPagingCount] = useState<number>(8);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>(2);
@@ -78,17 +81,30 @@ export default function ProductListPage() {
       if (Array.isArray(data)) {
         setProducts(data);
 
-        const firstPageData = data.slice(0, selectedPagingCount);
-        setFilteredProducts(firstPageData);
+        // URL에서 가져온 카테고리 적용
+        const category = searchParams.get("category");
+        if (category) {
+          setSelectedCategory(category);
+          const filtered = data.filter((p) => p.productCategory === category);
+          const firstPageData = filtered.slice(0, selectedPagingCount);
+          setFilteredProducts(firstPageData);
 
-        const totalPages = Math.ceil(data.length / selectedPagingCount);
-        setTotalPage(totalPages);
-        setHasMore(data.length > selectedPagingCount);
+          const totalPages = Math.ceil(filtered.length / selectedPagingCount);
+          setTotalPage(totalPages);
+          setHasMore(filtered.length > selectedPagingCount);
+        } else {
+          const firstPageData = data.slice(0, selectedPagingCount);
+          setFilteredProducts(firstPageData);
+
+          const totalPages = Math.ceil(data.length / selectedPagingCount);
+          setTotalPage(totalPages);
+          setHasMore(data.length > selectedPagingCount);
+        }
 
         setLoading(false);
       }
     });
-  }, [selectedPagingCount]); // scrollLoad 의존성 제거
+  }, [selectedPagingCount, searchParams]); // searchParams 의존성 추가
 
   // 자동 로드를 위한 별도의 useEffect
   useEffect(() => {
@@ -111,6 +127,13 @@ export default function ProductListPage() {
   const filterProduct = useCallback(
     (category: string | null) => {
       setCurrentPage(1);
+
+      // URL 파라미터 업데이트
+      if (category) {
+        setSearchParams({ category });
+      } else {
+        setSearchParams({});
+      }
 
       const filtered = category
         ? products.filter((product) => product.productCategory === category)
@@ -138,7 +161,7 @@ export default function ProductListPage() {
         setTimeout(() => scrollLoad(), 500);
       }
     },
-    [products, selectedPagingCount, scrollLoad]
+    [products, selectedPagingCount, scrollLoad, setSearchParams]
   );
 
   // 스크롤 감지 설정
@@ -173,6 +196,9 @@ export default function ProductListPage() {
   // 리셋 함수
   const resetProduct = useCallback(() => {
     setSelectedCategory("");
+    // URL 파라미터 초기화
+    setSearchParams({});
+
     setCurrentPage(1);
     setLoading(false);
 
@@ -186,7 +212,7 @@ export default function ProductListPage() {
     if (products.length > selectedPagingCount) {
       setTimeout(() => scrollLoad(), 500);
     }
-  }, [products, selectedPagingCount, scrollLoad]);
+  }, [products, selectedPagingCount, scrollLoad, setSearchParams]);
 
   return (
     <div className="flex flex-col w-full h-full box-border">

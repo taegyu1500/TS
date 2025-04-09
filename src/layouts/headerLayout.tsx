@@ -66,14 +66,16 @@ export default function HeaderLayout({
             >
               상품보기
             </button>
-
-            <button
-              onClick={() => navigate(isLogged ? "/logout" : "/login")}
-              className="text-gray-700 hover:text-blue-600 transition-colors font-medium flex items-center gap-1"
-            >
-              <User size={18} />
-              <span>{isLogged ? "로그아웃" : "로그인"}</span>
-            </button>
+            {/* 마이페이지 버튼 - 로그인 상태일 때만 표시 */}
+            {isLogged && (
+              <button
+                onClick={() => navigate("/profile")}
+                className="text-gray-700 hover:text-blue-600 transition-colors font-medium flex items-center gap-1"
+              >
+                <User size={18} />
+                <span>마이페이지</span>
+              </button>
+            )}
 
             {/* 장바구니 드롭다운 - 위치 수정 */}
             <div className="relative" ref={dropdownRef}>
@@ -164,6 +166,13 @@ export default function HeaderLayout({
                 </div>
               )}
             </div>
+            <button
+              onClick={() => navigate(isLogged ? "/logout" : "/login")}
+              className="text-gray-700 hover:text-blue-600 transition-colors font-medium flex items-center gap-1"
+            >
+              <User size={18} />
+              <span>{isLogged ? "로그아웃" : "로그인"}</span>
+            </button>
           </div>
 
           {/* 모바일 메뉴 버튼 - 위치 수정 */}

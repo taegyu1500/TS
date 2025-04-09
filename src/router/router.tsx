@@ -14,6 +14,7 @@ const PrivateRoute = lazy(() => import("./privateRoute"));
 const OrderPage = lazy(() => import("@/view/orderPage"));
 const ErrorPage = lazy(() => import("@/view/fragmentPages/errorPage"));
 const SearchList = lazy(() => import("@/view/searchList"));
+const ProfilePage = lazy(() => import("@/view/profilePage"));
 
 export default function Router() {
   return (
@@ -47,6 +48,14 @@ export default function Router() {
             <Route path="search/:keyword" element={<SearchList />} />
             <Route path="*" element={<ErrorPage />} />
             <Route path="logout" element={<LogoutPage />} />
+            <Route
+              path="profile"
+              element={
+                <PrivateRoute>
+                  <ProfilePage />
+                </PrivateRoute>
+              }
+            />
           </Route>
         </Routes>
       </Suspense>
